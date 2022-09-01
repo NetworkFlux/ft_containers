@@ -6,7 +6,7 @@
 /*   By: npinheir <npinheir@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/22 16:24:46 by npinheir          #+#    #+#             */
-/*   Updated: 2022/08/31 00:30:46 by npinheir         ###   ########.fr       */
+/*   Updated: 2022/09/01 17:44:08 by npinheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,13 @@ namespace ft
 				_container = _allocator.allocate(n);
 				for (size_type i = 0; i < n; i++)
 					_container[i] = val;
+			}
+
+			vector (const vector& x) : _size(x._size), _capacity(x._size), _allocator(x._allocator)
+			{
+				_container = _allocator.allocate(x._capacity);
+				for (size_t i = 0; i < _size; i++)
+					_container[i] = x._container[i];
 			}
 
 		/*	DESTRUCTOR	*/
@@ -157,11 +164,42 @@ namespace ft
 			const pointer data() const {return _container;}
 
 		// -- MODIFIERS --
+			void assign(size_type n, const_reference val)
+			{
+				delete _container;
+				*this = vector(n, val);
+			}
+		
 			void push_back (const value_type& val)
 			{
 				if (_size >= _capacity)
 					reallocate(_capacity * 2);
 				_container[_size++] = val;
+			}
+
+			void pop_back()
+			{
+				if (!empty())
+					delete _container[--_size];
+			}
+
+			iterator insert(iterator position, const_reference val)
+			{
+				iterator	temp = end();
+				size_type	i = 2;
+
+				if (_size >= _capacity)
+					reallocate(_capacity * 2);
+				temp--;
+				while (temp != position)
+				{
+					*temp = _container[_size - i];
+					temp--;
+					i++;
+				}
+				temp--;
+				*temp = val;
+				return (temp);
 			}
 
 		// -- ALLOCATOR --
