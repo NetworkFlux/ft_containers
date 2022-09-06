@@ -6,7 +6,7 @@
 /*   By: npinheir <npinheir@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/22 16:24:46 by npinheir          #+#    #+#             */
-/*   Updated: 2022/09/01 17:44:08 by npinheir         ###   ########.fr       */
+/*   Updated: 2022/09/05 19:08:49 by npinheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,21 +58,25 @@ namespace ft
 			{
 				_container = _allocator.allocate(n);
 				for (size_type i = 0; i < n; i++)
-					_container[i] = val;
+					_allocator.construct(_container + i, val);
 			}
 
 			vector (const vector& x) : _size(x._size), _capacity(x._size), _allocator(x._allocator)
 			{
 				_container = _allocator.allocate(x._capacity);
 				for (size_t i = 0; i < _size; i++)
-					_container[i] = x._container[i];
+					_allocator.construct(_container + i, x._container[i]);
 			}
 
 		/*	DESTRUCTOR	*/
 			~vector()
 			{
 				if (!_capacity)
-					delete[] _container;
+				{
+					for (size_t i = 0; i < _capacity; i++)
+						_allocator.destroy(_container + i);
+					_allocator.deallocate(_container, _capacity);
+				}
 			}
 
 		/*	PUBLIC METHODS OF VECTORS	*/
@@ -91,7 +95,10 @@ namespace ft
 
 			size_type max_size() const { return allocator_type().max_size(); } // size_type is too small to take the big number needed
 
-			// void resize (size_type n, value_type val = value_type())
+			void resize (size_type n, value_type val = value_type())
+			{
+				
+			}
 
 			size_type capacity() const { return _capacity; }
 
@@ -121,43 +128,29 @@ namespace ft
 			const_reference operator[](size_type n) const { return (_container[n]); }
 			reference at(size_type n)
 			{
-				//exception
-				if (n < _size)
-					return *(_container + n);
+				//exception + verif n
+				return *(_container + n);
 			}
 			const_reference at(size_type n) const
 			{
-				//exception
-				if (n < _size)
-					return *(_container + n);
+				//exception + verif n
+				return *(_container + n);
 			}
 			reference front()
 			{
-				if (empty())
-					return NULL;
-				else
-					return *_container;
+				return *_container;
 			}
 			const_reference front() const
 			{
-				if (empty())
-					return NULL;
-				else
-					return *_container;
+				return *_container;
 			}
 			reference back()
 			{
-				if (empty())
-					return NULL;
-				else
-					return *(_container + _size - 1);
+				return *(_container + _size - 1);
 			}
 			const_reference back() const
 			{
-				if (empty())
-					return NULL;
-				else
-					return *(_container + _size - 1);
+				return *(_container + _size - 1);
 			}
 
 			pointer data() {return _container;}
@@ -213,12 +206,10 @@ namespace ft
 
 				if (_capacity == 0)
 					new_capacity = 1;
-				else if (new_capacity <= _capacity)
-					new_capacity = 2 * _capacity;
 				new_container = _allocator.allocate(new_capacity);
 				for (size_type i = 0; i < _size; i++)
 					new_container[i] = _container[i];
-				delete[] _container;
+				_allocator.deallocate(_container, _capacity);
 				_container = new_container;
 				_capacity = new_capacity;
 			}

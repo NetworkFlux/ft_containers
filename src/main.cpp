@@ -6,7 +6,7 @@
 /*   By: npinheir <npinheir@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/22 16:29:06 by npinheir          #+#    #+#             */
-/*   Updated: 2022/09/01 19:04:43 by npinheir         ###   ########.fr       */
+/*   Updated: 2022/09/05 18:55:36 by npinheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,49 @@ void	iteratorTests(void)
 	std::cout << *b << "]" << std::endl;
 }
 
+void	capacityTests(void)
+{
+	printTitle("CAPACITY");
+	ft::vector<std::string>	vec(5, "Hello");
+	printSubTitle("size()");
+	std::cout << "Vector size : " << vec.size() << std::endl;
+	printSubTitle("max_size()");
+	std::cout << "Vector max size : " << vec.max_size() << std::endl;
+	printSubTitle("resize()");
+	printSubTitle("capacity()");
+	std::cout << "Vector capacity : " << vec.capacity() << std::endl;
+	printSubTitle("empty()");
+	std::cout << "Vector is empty : " << vec.empty() << std::endl;
+	printSubTitle("reserve()");
+	vec.reserve(12);
+	std::cout << "Vector new capacity : " << vec.capacity() << std::endl;
+	printSubTitle("shrink_to_fit()");
+	vec.shrink_to_fit();
+	std::cout << "Vector new capacity : " << vec.capacity() << std::endl;
+}
+
+void	elementAccessTests(void)
+{
+	printTitle("ELEMENT ACCESS");
+	ft::vector<double>	vec;
+	vec.push_back(1.2f);
+	vec.push_back(2.2f);
+	vec.push_back(3.2f);
+	vec.push_back(4.2f);
+	vec.push_back(5.2f);
+	printVector(vec);
+	printSubTitle("at()");
+	std::cout << "Accessing 4th element using at : " << vec.at(4) << std::endl;
+	printSubTitle("front()");
+	std::cout << "Accessing the front element : " << vec.front() << std::endl;
+	printSubTitle("back()");
+	std::cout << "Accessing the back element : " << vec.back() << std::endl;
+	printSubTitle("data()");
+	void	*ptr;
+	ptr = vec.data();
+	std::cout << "Address of the first element : " << &(vec[0]) << " -- by data : " << ptr << std::endl;
+}
+
 int	main(void)
 {
 	/*	INITIALIZATION	*/
@@ -130,7 +173,8 @@ int	main(void)
 
 	constructorTests();
 	iteratorTests();
-
+	capacityTests();
+	elementAccessTests();
 
 	/*	OUTPUT AND DEBBUG	*/
 
@@ -139,7 +183,7 @@ int	main(void)
 	long microseconds = end.tv_usec - begin.tv_usec;
 	double elapsed = seconds + microseconds * 1e-6;
 	printf("Time measured: %.3f seconds.\n", elapsed);
-	// std::cin.get();
-	// system("leaks ft_containers");
+	std::cin.get();
+	system("leaks ft_containers");
 	return (0);
 }
