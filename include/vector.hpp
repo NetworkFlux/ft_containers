@@ -6,7 +6,7 @@
 /*   By: npinheir <npinheir@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/22 16:24:46 by npinheir          #+#    #+#             */
-/*   Updated: 2022/09/08 13:08:10 by npinheir         ###   ########.fr       */
+/*   Updated: 2022/09/13 16:05:45 by npinheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include <iostream>
 # include "random_access_iterator.hpp"
+# include "utils.hpp"
 
 namespace ft
 {
@@ -33,8 +34,8 @@ namespace ft
 			typedef typename	allocator_type::const_pointer				const_pointer;
 			typedef	random_access_iterator<value_type>						iterator;
 			typedef	random_access_iterator<const value_type>				const_iterator;
-			// typedef typename	reverseIterator<iterator>					reverse_iterator;
-			// typedef typename	reverseIterator<const_iterator>				const_reverse_iterator;
+			typedef 			ft::reverse_iterator<iterator>				reverse_iterator;
+			typedef 			ft::reverse_iterator<const_iterator>		const_reverse_iterator;
 			typedef typename	iterator_traits<iterator>::difference_type	difference_type;
 			typedef typename	allocator_type::size_type					size_type;
 
@@ -64,24 +65,16 @@ namespace ft
 					_allocator.construct(_container + i, x._container[i]);
 			}
 
-			// template <class InputIterator>
-			// vector (InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type()) : _allocator(alloc)
-			// {
-			// 	InputIterator	temp = first;
-			// 	size_t			capacity = 0;
-			// 	size_t			i = 0;
-
-			// 	while (temp != last)
-			// 		capacity++;
-			// 	_container = _allocator.allocate(capacity);
-			// 	_capacity = capacity;
-			// 	_size = capacity;
-			// 	while (first != last)
-			// 	{
-			// 		_allocator.construct(_container + i++, first);
-			// 		first++;
-			// 	}
-			// }
+			template <class InputIterator>
+			vector (InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type(),
+						typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type* = 0) : _allocator(alloc)
+			{
+				_size = last - first;
+				_capacity = _size;
+				_container = _allocator.allocate(_capacity);
+				for (size_type i = 0; i < _size; i++)
+					_allocator.construct(_container + i, *(first + i));
+			}
 
 		/*	DESTRUCTOR	*/
 			~vector()
@@ -95,9 +88,12 @@ namespace ft
 		public:
 			iterator begin() {return _container;}
 			const_iterator begin() const {return _container;}
+			reverse_iterator rbegin() {return (reverse_iterator(this->end()));}
+			const_reverse_iterator rbegin() const {return (reverse_iterator(this->end()));}
 			iterator end() {return _container + _size;}
 			const_iterator end() const {return _container + _size;}
-			// reverse iterators ...
+			reverse_iterator rend() {return (reverse_iterator(this->begin()));}
+			const_reverse_iterator rend() const {return (reverse_iterator(this->begin()));}
 
 		// -- CAPACITY --
 		public:
@@ -313,6 +309,43 @@ namespace ft
 				}
 			}
 	};
+
+	template <class T, class Alloc>
+	bool operator== (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
+	{
+		if (lhs.size() != rhs.size())
+			return (false);
+		for (size_t i = 0; i < lhs.size(); i++)
+		{
+			if (lhs[i] != rhs[i])
+				return (false);
+		}
+		return (true);
+	}
+
+	template <class T, class Alloc>
+	bool operator!= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs) { return (!(lhs == rhs));}
+
+	template <class T, class Alloc>
+	bool operator< (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
+	{
+		return (ft::lexicographical_compare(lhs.begin, lhs.end(), rhs.begin(), rhs.end()));
+	}
+
+	template <class T, class Alloc>
+	bool operator<= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs) { return (!(rhs < lhs)); }
+
+	template <class T, class Alloc>
+	bool operator> (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs) { return (rhs < lhs); }
+
+	template <class T, class Alloc>
+	bool operator>= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs) { return (!(lhs < rhs)); }
+
+	// template <class T, class Alloc>
+	// void swap (vector<T,Alloc>& x, vector<T,Alloc>& y)
+	// {
+	// 	x.swap(y);
+	// }
 }
 
 #endif

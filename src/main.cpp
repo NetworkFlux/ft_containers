@@ -6,7 +6,7 @@
 /*   By: npinheir <npinheir@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/22 16:29:06 by npinheir          #+#    #+#             */
-/*   Updated: 2022/09/08 13:04:35 by npinheir         ###   ########.fr       */
+/*   Updated: 2022/09/12 15:53:48 by npinheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,11 +90,11 @@ void	constructorTests(void)
 	ft::vector<int>	fill(9, 20);
 	vectorAllocationProof(fill, "FILL");
 
-	// ft::vector<int>::iterator	first = fill.begin();
-	// ft::vector<int>::iterator	last = fill.end();
-	// printSubTitle("RANGE CONSTRUCTOR");
-	// ft::vector<int>	range(first, last);
-	// vectorAllocationProof(range, "RANGE");
+	ft::vector<int>::iterator	first = fill.begin();
+	ft::vector<int>::iterator	last = fill.end();
+	printSubTitle("RANGE CONSTRUCTOR");
+	ft::vector<int>	range(first, last);
+	vectorAllocationProof(range, "RANGE");
 
 	printSubTitle("COPY CONSTRUCTOR");
 	ft::vector<int>	copy(fill);
@@ -114,6 +114,9 @@ void	iteratorTests(void)
 	printVector(vec);
 	ft::vector<int>::iterator	b = vec.begin();
 	ft::vector<int>::iterator	e = vec.end();
+
+	ft::vector<int>::reverse_iterator	rb = vec.rbegin();
+	ft::vector<int>::reverse_iterator	re = vec.rend();
 	
 	std::cout << "begin() points to : " << *b << std::endl;
 	std::cout << "end() points to : " << *e << std::endl;
@@ -135,6 +138,24 @@ void	iteratorTests(void)
 	}
 	*b = *b * *b;
 	std::cout << *b << "]" << std::endl;
+
+	std::cout << "Looping through the vector using reverse iterators : [";
+	while (rb != re - 1)
+	{
+		std::cout << *rb << " ";
+		rb++;
+	}
+	std::cout << *rb << "]" << std::endl;
+	std::cout << "Modifying values using reverse iterators : [";
+	rb = vec.rbegin();
+	while (rb != re - 1)
+	{
+		*rb = *rb * *rb;
+		std::cout << *rb << " ";
+		rb++;
+	}
+	*rb = *rb * *rb;
+	std::cout << *rb << "]" << std::endl;
 }
 
 void	capacityTests(void)
@@ -235,10 +256,10 @@ int	main(void)
 	{
 
 		// constructorTests();
-		// iteratorTests();
+		iteratorTests();
 		// capacityTests();
 		// elementAccessTests();
-		modifiersTests();
+		// modifiersTests();
 
 	}
 	/*	OUTPUT AND DEBBUG	*/
