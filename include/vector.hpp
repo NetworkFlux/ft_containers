@@ -6,7 +6,7 @@
 /*   By: npinheir <npinheir@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/22 16:24:46 by npinheir          #+#    #+#             */
-/*   Updated: 2022/09/13 16:05:45 by npinheir         ###   ########.fr       */
+/*   Updated: 2022/09/13 17:23:35 by npinheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,22 +98,21 @@ namespace ft
 		// -- CAPACITY --
 		public:
 			size_type size() const { return _size; }
-
 			size_type max_size() const { return allocator_type().max_size(); } // size_type is too small to take the big number needed
-
 			void resize (size_type n, value_type val = value_type())
 			{
 				if (n < _size)
-					reallocate(n);
+				{
+					while (_size > n)
+						_allocator.destroy(_container + (_size-- - 1));
+				}
 				else
 				{
-					for (size_t i = 0; i < (n - _size); i++)
+					for (size_t i = _size; i < n; i++)
 						push_back(val);
 				}
 			}
-
 			size_type capacity() const { return _capacity; }
-
 			bool empty() const
 			{
 				if (_size == 0)
@@ -121,7 +120,6 @@ namespace ft
 				else
 					return false;
 			}
-
 			void reserve (size_type n)
 			{
 				if (n > _capacity)
@@ -134,12 +132,14 @@ namespace ft
 			const_reference operator[](size_type n) const { return (_container[n]); }
 			reference at(size_type n)
 			{
-				//exception + verif n
+				if (n > _size)
+					throw std::out_of_range("vector at out of range");
 				return *(_container + n);
 			}
 			const_reference at(size_type n) const
 			{
-				//exception + verif n
+				if (n > _size)
+					throw std::out_of_range("vector at out of range");
 				return *(_container + n);
 			}
 			reference front()

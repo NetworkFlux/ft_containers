@@ -6,7 +6,7 @@
 /*   By: npinheir <npinheir@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/22 16:29:06 by npinheir          #+#    #+#             */
-/*   Updated: 2022/09/12 15:53:48 by npinheir         ###   ########.fr       */
+/*   Updated: 2022/09/13 17:17:04 by npinheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,8 +103,10 @@ void	constructorTests(void)
 
 void	iteratorTests(void)
 {
+	// Iterators
 	printTitle("ITERATORS");
-	printSubTitle("begin() -- end()");
+	// begin() - end()
+	printSubTitle("begin() - end()");
 	ft::vector<int>	vec;
 	vec.push_back(1);
 	vec.push_back(2);
@@ -138,7 +140,14 @@ void	iteratorTests(void)
 	}
 	*b = *b * *b;
 	std::cout << *b << "]" << std::endl;
+	std::cout << std::endl;
 
+	// rbegin() - rend()
+	printSubTitle("rbegin() - rend()");
+	printVector(vec);
+	std::cout << "begin() points to : " << *rb << std::endl;
+	std::cout << "end() points to : " << *re << std::endl;
+	std::cout << "end() - 1 points to : " << *(re - 1) << std::endl;
 	std::cout << "Looping through the vector using reverse iterators : [";
 	while (rb != re - 1)
 	{
@@ -156,6 +165,7 @@ void	iteratorTests(void)
 	}
 	*rb = *rb * *rb;
 	std::cout << *rb << "]" << std::endl;
+	std::cout << std::endl;
 }
 
 void	capacityTests(void)
@@ -167,8 +177,12 @@ void	capacityTests(void)
 	std::cout << "Vector size : " << vec.size() << std::endl;
 	printSubTitle("max_size()");
 	std::cout << "Vector max size : " << vec.max_size() << std::endl;
-	printSubTitle("resize()");
+	printSubTitle("resize(less)");
 	vec.resize(3);
+	printVector(vec);
+	std::cout << "Vector new size : " << vec.size() << " and new capacity : " << vec.capacity() << std::endl;
+	printSubTitle("resize(more)");
+	vec.resize(6, "yo");
 	printVector(vec);
 	std::cout << "Vector new size : " << vec.size() << " and new capacity : " << vec.capacity() << std::endl;
 	printSubTitle("capacity()");
@@ -192,6 +206,7 @@ void	elementAccessTests(void)
 	printVector(vec);
 	printSubTitle("at()");
 	std::cout << "Accessing 4th element using at : " << vec.at(4) << std::endl;
+	std::cout << "Accessing out of range element using at : " << vec.at(8) << std::endl;
 	printSubTitle("front()");
 	std::cout << "Accessing the front element : " << vec.front() << std::endl;
 	printSubTitle("back()");
@@ -255,11 +270,11 @@ int	main(void)
 	/*	CODE	*/
 	{
 
-		// constructorTests();
-		iteratorTests();
-		// capacityTests();
-		// elementAccessTests();
-		// modifiersTests();
+		// constructorTests(); -- need range
+		// iteratorTests(); -- OK
+		// capacityTests(); -- OK
+		elementAccessTests();
+		// modifiersTests(); -- need end of modifiers
 
 	}
 	/*	OUTPUT AND DEBBUG	*/
