@@ -6,7 +6,7 @@
 /*   By: npinheir <npinheir@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/22 16:24:46 by npinheir          #+#    #+#             */
-/*   Updated: 2022/09/13 17:23:35 by npinheir         ###   ########.fr       */
+/*   Updated: 2022/09/13 17:25:54 by npinheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define VECTOR_HPP
 
 # include <iostream>
+
 # include "random_access_iterator.hpp"
 # include "utils.hpp"
 
