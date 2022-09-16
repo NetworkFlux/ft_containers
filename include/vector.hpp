@@ -6,7 +6,7 @@
 /*   By: npinheir <npinheir@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/22 16:24:46 by npinheir          #+#    #+#             */
-/*   Updated: 2022/09/08 13:08:10 by npinheir         ###   ########.fr       */
+/*   Updated: 2022/09/12 11:18:53 by npinheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -233,7 +233,7 @@ namespace ft
 
 			iterator insert(iterator position, size_type n, const_reference val)
 			{
-				pointer	new_container;
+				pointer		new_container;
 				iterator	first = begin();
 				iterator	res;
 				iterator	last = end();
@@ -273,6 +273,83 @@ namespace ft
 			// {
 				
 			// }
+
+			iterator erase(iterator position)
+			{
+				pointer		new_container;
+				iterator	first = begin();
+				iterator	last = end();
+				size_type	i = 0;
+
+				new_container = _allocator.allocate(_capacity);
+				while (first != position)
+				{
+					new_container[i++] = *first;
+					++first;
+				}
+				position = ++first;
+				while (position != last)
+				{
+					new_container[i++] = *position;
+					++position;
+				}
+				clearContainer();
+				_container = new_container;
+				_size--;
+				return (first);
+			}
+
+			iterator erase(iterator first, iterator last)
+			{
+				pointer		new_container;
+				iterator	b = begin();
+				iterator	e = end();
+				iterator	temp;
+				size_type	i = 0;
+
+				_size -= &(*last) - &(*first);
+				new_container = _allocator.allocate(_capacity);
+				while (b != first)
+				{
+					new_container[i++] = *b;
+					++b;
+				}
+				temp = last;
+				while (last != e)
+				{
+					new_container[i++] = *last;
+					++last;
+				}
+				clearContainer();
+				_container = new_container;
+				return (last);
+			}
+
+			void swap(vector& x)
+			{
+				allocator_type	save_allocator = x._allocator;
+				size_type		save_size = x._size;
+				size_type		save_capacity = x._capacity;
+				pointer			save_container = x._container;
+
+				x._allocator = _allocator;
+				x._size = _size;
+				x._capacity = _capacity;
+				x._container = _container;
+				_allocator = save_allocator;
+				_size = save_size;
+				_capacity = save_capacity;
+				_container = save_container;
+			}
+
+			void clear()
+			{
+				if (_size)
+				{
+					for (size_t i = 0; i < _size; _size--)
+						_allocator.destroy(_container + _size);
+				}
+			}
 
 		// -- ALLOCATOR --
 			allocator_type get_allocator() const { return _allocator; }

@@ -6,7 +6,7 @@
 /*   By: npinheir <npinheir@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/22 16:29:06 by npinheir          #+#    #+#             */
-/*   Updated: 2022/09/08 13:04:35 by npinheir         ###   ########.fr       */
+/*   Updated: 2022/09/12 11:19:15 by npinheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -221,7 +221,31 @@ void	modifiersTests(void)
 	first = vec.insert(first, 5, 2);
 	printVector(vec);
 	std::cout << "Infos after the range insert; size : " << vec.size() << " capacity : " << vec.capacity() << std::endl;
-	
+	printSubTitle("erase()");
+	first = vec.begin();
+	vec.erase(first);
+	printVector(vec);
+	std::cout << "Infos after the range insert; size : " << vec.size() << " capacity : " << vec.capacity() << std::endl;
+	first = vec.begin();
+	ft::vector<int>::iterator	second = first + 3;
+	vec.erase(first, second);
+	printVector(vec);
+	std::cout << "Infos after the range insert; size : " << vec.size() << " capacity : " << vec.capacity() << std::endl;
+	printSubTitle("swap()");
+	ft::vector<int>	vec1(5, 10);
+	ft::vector<int>	vec2(3, 50);
+	printVector(vec1);
+	printVector(vec2);
+	std::cout << "Vectors after the swap :" << std::endl;
+	vec1.swap(vec2);
+	printVector(vec1);
+	printVector(vec2);
+	printSubTitle("clear()");
+	printVector(vec);
+	std::cout << "Infos after the range insert; size : " << vec.size() << " capacity : " << vec.capacity() << std::endl;
+	vec.clear();
+	printVector(vec);
+	std::cout << "Infos after the range insert; size : " << vec.size() << " capacity : " << vec.capacity() << std::endl;
 }
 
 int	main(void)
