@@ -1,16 +1,6 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   main2.cpp                                          :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: npinheir <npinheir@student.s19.be>         +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/08/22 16:28:56 by npinheir          #+#    #+#             */
-/*   Updated: 2022/09/13 17:17:31 by npinheir         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include <iostream>
+#include "include/vector.hpp"
+#include <stack>
 #include <vector>
 #include <sys/time.h>
 
@@ -50,6 +40,55 @@ void	printVector(std::vector<T>& vec)
 			std::cout << vec[i] << " ";
 		std::cout << vec[vec.size() - 1] << "]"<< std::endl;
 	}
+}
+
+/*	Shows the allocation mechanisme by adding some values to the vector
+	and by showing its size and capacity	*/
+template <class T>
+void	vectorAllocationProof(std::vector<T>& vec, std::string name)
+{
+	std::cout << "Vector (" << name << ") was initialize with Size : " << vec.size() << " and Capacity : " << vec.capacity() << std::endl;
+	printInfo("Doing some push_back() to add values and see how the container reacts");
+	std::cout << "\033[32m Allocation Proof :\033[0m" << std::endl;
+	vec.push_back(10);
+	std::cout << name << ": size = " << vec.size() << "; capacity = " << vec.capacity() << std::endl;
+	vec.push_back(10);
+	std::cout << name << ": size = " << vec.size() << "; capacity = " << vec.capacity() << std::endl;
+	vec.push_back(10);
+	vec.push_back(10);
+	std::cout << name << ": size = " << vec.size() << "; capacity = " << vec.capacity() << std::endl;
+	vec.push_back(10);
+	vec.push_back(10);
+	vec.push_back(10);
+	std::cout << name << ": size = " << vec.size() << "; capacity = " << vec.capacity() << std::endl;
+	vec.push_back(10);
+	vec.push_back(10);
+	vec.push_back(10);
+	std::cout << name << ": size = " << vec.size() << "; capacity = " << vec.capacity() << std::endl << std::endl;
+	printVector(vec);
+	std::cout << std::endl;
+}
+
+void	constructorTests(void)
+{
+	printTitle("CONSTRUCTORS");
+	printSubTitle("DEFAULT CONSTRUCTOR");
+	std::vector<int>	empty;
+	vectorAllocationProof(empty, "EMPTY");
+
+	printSubTitle("FILL CONSTRUCTOR");
+	std::vector<int>	fill(9, 20);
+	vectorAllocationProof(fill, "FILL");
+
+	std::vector<int>::iterator	first = fill.begin();
+	std::vector<int>::iterator	last = fill.end();
+	printSubTitle("RANGE CONSTRUCTOR");
+	std::vector<int>	range(first, last);
+	vectorAllocationProof(range, "RANGE");
+
+	printSubTitle("COPY CONSTRUCTOR");
+	std::vector<int>	copy(fill);
+	vectorAllocationProof(copy, "COPY");
 }
 
 void	iteratorTests(void)
@@ -96,9 +135,9 @@ void	iteratorTests(void)
 	// rbegin() - rend()
 	printSubTitle("rbegin() - rend()");
 	printVector(vec);
-	std::cout << "begin() points to : " << *rb << std::endl;
-	std::cout << "end() points to : " << *re << std::endl;
-	std::cout << "end() - 1 points to : " << *(re - 1) << std::endl;
+	std::cout << "rbegin() points to : " << *rb << std::endl;
+	std::cout << "rend() points to : " << *re << std::endl;
+	std::cout << "rend() - 1 points to : " << *(re - 1) << std::endl;
 	std::cout << "Looping through the vector using reverse iterators : [";
 	while (rb != re - 1)
 	{
@@ -168,6 +207,132 @@ void	elementAccessTests(void)
 	std::cout << "Address of the first element operator []: " << &(vec[0]) << " -- Address of the first element using data(): " << ptr << std::endl;
 }
 
+void	modifiersTests(void)
+{
+	printTitle("MODIFIERS");
+	std::vector<int>	vec(5, 42);
+	std::vector<int>	vec3(6, 666);
+	std::vector<int>::iterator	first2 = vec3.begin();
+	std::vector<int>::iterator	end2 = vec3.end();
+
+	printVector(vec);
+	printSubTitle("assign() -- range ");
+	vec.assign(first2, end2);
+	printVector(vec);
+	std::cout << "Infos after the assign; size : " << vec.size() << " capacity : " << vec.capacity() << std::endl;
+	printSubTitle("assign() -- fill ");
+	vec.assign(8, 12);
+	printVector(vec);
+	std::cout << "Infos after the assign; size : " << vec.size() << " capacity : " << vec.capacity() << std::endl;
+	printSubTitle("push_back()");
+	vec.push_back(13);
+	vec.push_back(14);
+	vec.push_back(15);
+	printVector(vec);
+	std::cout << "Infos after the push_back; size : " << vec.size() << " capacity : " << vec.capacity() << std::endl;
+	printSubTitle("pop_back()");
+	vec.pop_back();
+	vec.pop_back();
+	printVector(vec);
+	std::cout << "Infos after the pop_back(); size : " << vec.size() << " capacity : " << vec.capacity() << std::endl;
+	printSubTitle("insert()");
+	std::vector<int>::iterator	first = vec.begin();
+	first++;
+	first = vec.insert(first, 100);
+	printVector(vec);
+	std::cout << "Infos after the insert; size : " << vec.size() << " capacity : " << vec.capacity() << std::endl;
+	first = vec.insert(first, 5, 1);
+	printVector(vec);
+	std::cout << "Infos after the range insert; size : " << vec.size() << " capacity : " << vec.capacity() << std::endl;
+	// vec.insert(first, first2, end2);
+	// printVector(vec);
+	// std::cout << "Infos after the range insert; size : " << vec.size() << " capacity : " << vec.capacity() << std::endl;
+	printSubTitle("erase()");
+	first = vec.begin();
+	vec.erase(first);
+	printVector(vec);
+	std::cout << "Infos after the erase; size : " << vec.size() << " capacity : " << vec.capacity() << std::endl;
+	first = vec.begin();
+	std::vector<int>::iterator	second = first + 3;
+	vec.erase(first, second);
+	printVector(vec);
+	std::cout << "Infos after the erase; size : " << vec.size() << " capacity : " << vec.capacity() << std::endl;
+	printSubTitle("swap()");
+	std::vector<int>	vec1(5, 10);
+	std::vector<int>	vec2(3, 50);
+	printVector(vec1);
+	printVector(vec2);
+	std::cout << "Vectors after the swap :" << std::endl;
+	vec1.swap(vec2);
+	printVector(vec1);
+	printVector(vec2);
+	printSubTitle("clear()");
+	printVector(vec);
+	std::cout << "Infos before the clear; size : " << vec.size() << " capacity : " << vec.capacity() << std::endl;
+	vec.clear();
+	printVector(vec);
+	std::cout << "Infos after the clear; size : " << vec.size() << " capacity : " << vec.capacity() << std::endl;
+}
+
+void	relationalOperators(void)
+{
+	std::vector<float>	vec1(5, 10.2);
+	std::vector<float>	vec2(7, 14.2);
+
+	printTitle("Relational Operators");
+	printVector(vec1);
+	printVector(vec2);
+	printSubTitle(" ==" );
+	std::cout << "Are vector 1 and vector 2 equal : " << (vec1 == vec2) << std::endl;
+	printSubTitle(" != ");
+	std::cout << "Are vector 1 and vector 2 not equal : " << (vec1 != vec2) << std::endl;
+	printSubTitle(" > ");
+	std::cout << "Is vector 1 greater than vector 2 : " << (vec1 > vec2) << std::endl;
+	printSubTitle(" >= ");
+	std::cout << "Is vector 1 greater or equal than vector 2 : " << (vec1 >= vec2) << std::endl;
+	printSubTitle(" < ");
+	std::cout << "Is vector 1 less than vector 2 : " << (vec1 < vec2) << std::endl;
+	printSubTitle(" <= ");
+	std::cout << "Is vector 1 less or equal than vector 2 : " << (vec1 <= vec2) << std::endl;
+}
+
+// template <class T>
+// void	printStack(std::stack<T, std::vector<T> >& stack)
+// {
+// 	if (stack.size() == 0)
+// 		std::cout << "\033[32m Stack content : \033[0m[]" << std::endl;
+// 	else
+// 	{
+// 		std::cout << "\033[32m Stack content : \033[0m[";
+// 		for (size_t i = 0; i < stack.size() - 1; i++)
+// 			std::cout << stack.getContainer()[i] << " ";
+// 		std::cout << stack.getContainer()[stack.size() - 1] << "]"<< std::endl;
+// 	}
+// }
+
+void	stackTests(void)
+{
+	std::stack<int, ft::vector<int> >	stack1;
+	std::stack<int, ft::vector<int> >	stack2(stack1);
+
+	printTitle("Stack Tests");
+	// printStack(stack1);
+	// printStack(stack2);
+	printSubTitle("empty");
+	std::cout << "Is the stack empty : " << stack1.empty() << std::endl;
+	printSubTitle("push and size");
+	for (int i = 1; i < 6; i++)
+		stack1.push(i);
+	// printStack(stack1);
+	std::cout << "Infos after pushing ; size : " << stack1.size() << std::endl;
+	printSubTitle("top");
+	std::cout << "Element at the top of the stack : " << stack1.top() << std::endl;
+	printSubTitle("pop");
+	stack1.pop();
+	// printStack(stack1);
+	std::cout << "Infos after poping ; size : " << stack1.size() << std::endl;
+}
+
 int	main(void)
 {
 	/*	INITIALIZATION	*/
@@ -177,9 +342,17 @@ int	main(void)
 
 	/*	CODE	*/
 	{
+		// Vector
+
+		// constructorTests();
 		// iteratorTests();
 		// capacityTests();
-		elementAccessTests();
+		// elementAccessTests();
+		// modifiersTests();
+		// relationalOperators();
+
+		stackTests();
+
 	}
 	/*	OUTPUT AND DEBBUG	*/
 

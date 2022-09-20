@@ -6,11 +6,13 @@
 /*   By: npinheir <npinheir@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/22 16:29:06 by npinheir          #+#    #+#             */
-/*   Updated: 2022/09/16 17:33:10 by npinheir         ###   ########.fr       */
+/*   Updated: 2022/09/20 15:40:57 by npinheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "stack.hpp"
 #include "vector.hpp"
+#include "map.hpp"
 #include <vector>
 #include <sys/time.h>
 
@@ -145,9 +147,9 @@ void	iteratorTests(void)
 	// rbegin() - rend()
 	printSubTitle("rbegin() - rend()");
 	printVector(vec);
-	std::cout << "begin() points to : " << *rb << std::endl;
-	std::cout << "end() points to : " << *re << std::endl;
-	std::cout << "end() - 1 points to : " << *(re - 1) << std::endl;
+	std::cout << "rbegin() points to : " << *rb << std::endl;
+	std::cout << "rend() points to : " << *re << std::endl;
+	std::cout << "rend() - 1 points to : " << *(re - 1) << std::endl;
 	std::cout << "Looping through the vector using reverse iterators : [";
 	while (rb != re - 1)
 	{
@@ -206,7 +208,7 @@ void	elementAccessTests(void)
 	printVector(vec);
 	printSubTitle("at()");
 	std::cout << "Accessing 4th element using at : " << vec.at(4) << std::endl;
-	std::cout << "Accessing out of range element using at : " << vec.at(8) << std::endl;
+	// std::cout << "Accessing out of range element using at : " << vec.at(8) << std::endl;
 	printSubTitle("front()");
 	std::cout << "Accessing the front element : " << vec.front() << std::endl;
 	printSubTitle("back()");
@@ -221,16 +223,25 @@ void	modifiersTests(void)
 {
 	printTitle("MODIFIERS");
 	ft::vector<int>	vec(5, 42);
+	ft::vector<int>	vec3(6, 666);
+	ft::vector<int>::iterator	first2 = vec3.begin();
+	ft::vector<int>::iterator	end2 = vec3.end();
 
 	printVector(vec);
-	printSubTitle("assign()");
-	vec.assign(3, 12);
+	printSubTitle("assign() -- range ");
+	vec.assign(first2, end2);
 	printVector(vec);
+	std::cout << "Infos after the assign; size : " << vec.size() << " capacity : " << vec.capacity() << std::endl;
+	printSubTitle("assign() -- fill ");
+	vec.assign(8, 12);
+	printVector(vec);
+	std::cout << "Infos after the assign; size : " << vec.size() << " capacity : " << vec.capacity() << std::endl;
 	printSubTitle("push_back()");
 	vec.push_back(13);
 	vec.push_back(14);
 	vec.push_back(15);
 	printVector(vec);
+	std::cout << "Infos after the push_back; size : " << vec.size() << " capacity : " << vec.capacity() << std::endl;
 	printSubTitle("pop_back()");
 	vec.pop_back();
 	vec.pop_back();
@@ -242,31 +253,22 @@ void	modifiersTests(void)
 	first = vec.insert(first, 100);
 	printVector(vec);
 	std::cout << "Infos after the insert; size : " << vec.size() << " capacity : " << vec.capacity() << std::endl;
-	first = vec.insert(first, 40);
-	printVector(vec);
-	std::cout << "Infos after the insert; size : " << vec.size() << " capacity : " << vec.capacity() << std::endl;
-	first = vec.insert(first, 30);
-	printVector(vec);
-	std::cout << "Infos after the insert; size : " << vec.size() << " capacity : " << vec.capacity() << std::endl;
-	first = vec.insert(first, 20);
-	printVector(vec);
-	std::cout << "Infos after the insert; size : " << vec.size() << " capacity : " << vec.capacity() << std::endl;
 	first = vec.insert(first, 5, 1);
 	printVector(vec);
 	std::cout << "Infos after the range insert; size : " << vec.size() << " capacity : " << vec.capacity() << std::endl;
-	first = vec.insert(first, 5, 2);
-	printVector(vec);
-	std::cout << "Infos after the range insert; size : " << vec.size() << " capacity : " << vec.capacity() << std::endl;
+	// vec.insert(first, first2, end2);
+	// printVector(vec);
+	// std::cout << "Infos after the range insert; size : " << vec.size() << " capacity : " << vec.capacity() << std::endl;
 	printSubTitle("erase()");
 	first = vec.begin();
 	vec.erase(first);
 	printVector(vec);
-	std::cout << "Infos after the range insert; size : " << vec.size() << " capacity : " << vec.capacity() << std::endl;
+	std::cout << "Infos after the erase; size : " << vec.size() << " capacity : " << vec.capacity() << std::endl;
 	first = vec.begin();
 	ft::vector<int>::iterator	second = first + 3;
 	vec.erase(first, second);
 	printVector(vec);
-	std::cout << "Infos after the range insert; size : " << vec.size() << " capacity : " << vec.capacity() << std::endl;
+	std::cout << "Infos after the erase; size : " << vec.size() << " capacity : " << vec.capacity() << std::endl;
 	printSubTitle("swap()");
 	ft::vector<int>	vec1(5, 10);
 	ft::vector<int>	vec2(3, 50);
@@ -278,10 +280,76 @@ void	modifiersTests(void)
 	printVector(vec2);
 	printSubTitle("clear()");
 	printVector(vec);
-	std::cout << "Infos after the range insert; size : " << vec.size() << " capacity : " << vec.capacity() << std::endl;
+	std::cout << "Infos before the clear; size : " << vec.size() << " capacity : " << vec.capacity() << std::endl;
 	vec.clear();
 	printVector(vec);
-	std::cout << "Infos after the range insert; size : " << vec.size() << " capacity : " << vec.capacity() << std::endl;
+	std::cout << "Infos after the clear; size : " << vec.size() << " capacity : " << vec.capacity() << std::endl;
+}
+
+void	relationalOperators(void)
+{
+	ft::vector<float>	vec1(5, 10.2);
+	ft::vector<float>	vec2(7, 14.2);
+
+	printTitle("Relational Operators");
+	printVector(vec1);
+	printVector(vec2);
+	printSubTitle(" ==" );
+	std::cout << "Are vector 1 and vector 2 equal : " << (vec1 == vec2) << std::endl;
+	printSubTitle(" != ");
+	std::cout << "Are vector 1 and vector 2 not equal : " << (vec1 != vec2) << std::endl;
+	printSubTitle(" > ");
+	std::cout << "Is vector 1 greater than vector 2 : " << (vec1 > vec2) << std::endl;
+	printSubTitle(" >= ");
+	std::cout << "Is vector 1 greater or equal than vector 2 : " << (vec1 >= vec2) << std::endl;
+	printSubTitle(" < ");
+	std::cout << "Is vector 1 less than vector 2 : " << (vec1 < vec2) << std::endl;
+	printSubTitle(" <= ");
+	std::cout << "Is vector 1 less or equal than vector 2 : " << (vec1 <= vec2) << std::endl;
+}
+
+template <class T>
+void	printStack(ft::stack<T, ft::vector<T> >& stack)
+{
+	if (stack.size() == 0)
+		std::cout << "\033[32m Stack content : \033[0m[]" << std::endl;
+	else
+	{
+		std::cout << "\033[32m Stack content : \033[0m[";
+		for (size_t i = 0; i < stack.size() - 1; i++)
+			std::cout << stack.getContainer()[i] << " ";
+		std::cout << stack.getContainer()[stack.size() - 1] << "]"<< std::endl;
+	}
+}
+
+void	stackTests(void)
+{
+	ft::stack<int, ft::vector<int> >	stack1;
+	ft::stack<int, ft::vector<int> >	stack2(stack1);
+
+	printTitle("Stack Tests");
+	printStack(stack1);
+	printStack(stack2);
+	printSubTitle("empty");
+	std::cout << "Is the stack empty : " << stack1.empty() << std::endl;
+	printSubTitle("push and size");
+	for (int i = 1; i < 6; i++)
+		stack1.push(i);
+	printStack(stack1);
+	std::cout << "Infos after pushing ; size : " << stack1.size() << std::endl;
+	printSubTitle("top");
+	std::cout << "Element at the top of the stack : " << stack1.top() << std::endl;
+	printSubTitle("pop");
+	stack1.pop();
+	printStack(stack1);
+	std::cout << "Infos after poping ; size : " << stack1.size() << std::endl;
+}
+
+void	mapTest(void)
+{
+	ft::map<std::string, int>	map1();
+
+	map["Nick"] = 25;
 }
 
 int	main(void)
@@ -293,13 +361,26 @@ int	main(void)
 
 	/*	CODE	*/
 	{
+		{
+			// Vector
 
-		// constructorTests(); -- need range
-		// iteratorTests(); -- OK
-		// capacityTests(); -- OK
-		elementAccessTests();
-		// modifiersTests(); -- need end of modifiers
+			// constructorTests();
+			// iteratorTests();
+			// capacityTests();
+			// elementAccessTests();
+			// modifiersTests();
+			// relationalOperators();
+		}
 
+		{
+			// Stack
+			// stackTests();
+		}
+
+		{
+			// Map
+			mapTest();
+		}
 	}
 	/*	OUTPUT AND DEBBUG	*/
 

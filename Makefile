@@ -1,4 +1,4 @@
-CC			= c++ -Wall -Wextra -Werror -std=c++98
+CC			= c++ -Wall -Wextra -Werror -std=c++98 #-g -fsanitize=address
 RM			= rm -rf
 NAME		= ./ft_containers
 NAME_SHORT	= ft_containers

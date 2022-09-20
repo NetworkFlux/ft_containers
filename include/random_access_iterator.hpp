@@ -6,7 +6,7 @@
 /*   By: npinheir <npinheir@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/27 15:38:23 by npinheir          #+#    #+#             */
-/*   Updated: 2022/09/12 16:06:44 by npinheir         ###   ########.fr       */
+/*   Updated: 2022/09/20 16:09:44 by npinheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ namespace ft
 			random_access_iterator(const random_access_iterator &other) : _ptr(other._ptr) {}
 			virtual ~random_access_iterator() {}
 
-			pointer base() const {return (this->_ptr);}
+			pointer base() const { return (this->_ptr); }
 
 			// OPERATOR OVERLOADS
 			random_access_iterator&	operator=(const random_access_iterator& other)
@@ -53,8 +53,8 @@ namespace ft
 				return (*this);
 			}
 
-			reference	operator*(void) const {return (*_ptr);}
-			pointer		operator->(void) {return &(this->operator*());}
+			reference	operator*(void) const { return (*_ptr); }
+			pointer		operator->(void) { return &(this->operator*()); }
 		
 			random_access_iterator&	operator++(void)
 			{
