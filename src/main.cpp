@@ -6,13 +6,14 @@
 /*   By: npinheir <npinheir@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/22 16:29:06 by npinheir          #+#    #+#             */
-/*   Updated: 2022/09/20 15:40:57 by npinheir         ###   ########.fr       */
+/*   Updated: 2022/09/23 00:18:21 by npinheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "stack.hpp"
 #include "vector.hpp"
 #include "map.hpp"
+#include "RBTree.hpp"
 #include <vector>
 #include <sys/time.h>
 
@@ -347,9 +348,41 @@ void	stackTests(void)
 
 void	mapTest(void)
 {
-	ft::map<std::string, int>	map1();
+	{
+		printTitle("ft::pair");
+		ft::pair<std::string, int>	empty;
+		ft::pair<std::string, int>	fill("Hello", 25);
+		ft::pair<std::string, int>	copy(fill);
 
-	map["Nick"] = 25;
+		empty.show();
+		fill.show();
+		copy.show();
+		std::cout << "Is A == to B ? " << (empty == fill) << std::endl;
+		std::cout << "Is A != to B ? " << (empty != fill) << std::endl;
+		std::cout << "Is A > than B ? " << (empty > fill) << std::endl;
+		std::cout << "Is A >= than B ? " << (empty >= fill) << std::endl;
+		std::cout << "Is B == to C ? " << (fill == copy) << std::endl;
+
+		ft::make_pair(42, 'A').show();
+	}
+
+	{
+		printTitle("Nodes");
+		ft::Node< ft::pair<std::string, int> >	empty;
+		ft::Node< ft::pair<std::string, int> >	valued(ft::make_pair("Ca va", 42), NULL);
+		ft::Node< ft::pair<std::string, int> >	copy(valued);
+
+		empty.show();
+		valued.show();
+		copy.show();
+		std::cout << "Is A == to B ? " << (empty == valued) << std::endl;
+		std::cout << "Is A != to B ? " << (empty != valued) << std::endl;
+		std::cout << "Is B == to C ? " << (valued == copy) << std::endl;
+	}
+
+	{
+		
+	}
 }
 
 int	main(void)
