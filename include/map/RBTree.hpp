@@ -19,6 +19,7 @@ namespace ft
 			typedef typename	allocator_type::const_pointer			const_pointer;
 			typedef				RBTIterator<P>							iterator;
 			typedef				RBTIterator<const P>					const_iterator;
+			typedef				size_t									size_type;
 
 		private:
 			allocator_type	_alloc;
@@ -41,6 +42,18 @@ namespace ft
 				return (*this);
 			}
 
+			// CAPACITY
+			bool		empty() const
+			{
+				if (_size > 0)
+					return (false);
+				return (true);
+			}
+
+			size_type	size() const { return (_size); }
+
+			size_type	max_size() const { return (_alloc.max_size()); }
+
 		private:
 			node_pointer	tree_min(node_pointer n)
 				{
@@ -54,5 +67,7 @@ namespace ft
 						n = n->right;
 					return (n);
 				}
+	
+	
 	};
 };

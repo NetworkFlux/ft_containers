@@ -6,7 +6,7 @@
 /*   By: npinheir <npinheir@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/22 16:29:06 by npinheir          #+#    #+#             */
-/*   Updated: 2022/09/25 23:24:56 by npinheir         ###   ########.fr       */
+/*   Updated: 2022/09/26 14:00:16 by npinheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 // #include "vector.hpp"
 // #include "map.hpp"
 // #include "RBTree.hpp"
-#include "../include/map/RBTree.hpp"
+#include "../include/map/map.hpp"
 // #include <vector>
 #include <sys/time.h>
 
@@ -451,7 +451,11 @@ int	main(void)
 	}
 	
 	{
-		ft::RBTree<ft::pair<std::string, int> >		tree(std::less<ft::pair<std::string, int> >);
+		ft::map<std::string, int>		tree;
+		
+		std::cout << "Is the map empty : " << tree.empty() << std::endl;
+		std::cout << "Map size : " << tree.size() << std::endl;
+		std::cout << "Map max size : " << tree.max_size() << std::endl;
 	}
 
 	}
