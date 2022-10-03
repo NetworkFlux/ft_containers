@@ -6,7 +6,7 @@
 /*   By: npinheir <npinheir@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/22 16:29:06 by npinheir          #+#    #+#             */
-/*   Updated: 2022/09/26 14:00:16 by npinheir         ###   ########.fr       */
+/*   Updated: 2022/09/30 18:23:16 by npinheir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	printInfo(std::string info)
 	std::cout << "\033[33m" << info << "\033[0m" << std::endl;
 }
 
-template <class T>
+// template <class T>
 // void	printVector(ft::vector<T>& vec)
 // {
 // 	if (vec.size() == 0)
@@ -347,50 +347,78 @@ template <class T>
 // 	std::cout << "Infos after poping ; size : " << stack1.size() << std::endl;
 // }
 
-void	mapTest(void)
+void	mapTests(void)
 {
-	{
-		printTitle("ft::pair");
-		ft::pair<std::string, int>	empty;
-		ft::pair<std::string, int>	fill("Hello", 25);
-		ft::pair<std::string, int>	copy(fill);
+	// {
+	// 	printTitle("ft::pair");
+	// 	ft::pair<std::string, int>	empty;
+	// 	ft::pair<std::string, int>	fill("Hello", 25);
+	// 	ft::pair<std::string, int>	copy(fill);
 
-		empty.show();
-		fill.show();
-		copy.show();
-		std::cout << "Is A == to B ? " << (empty == fill) << std::endl;
-		std::cout << "Is A != to B ? " << (empty != fill) << std::endl;
-		std::cout << "Is A > than B ? " << (empty > fill) << std::endl;
-		std::cout << "Is A >= than B ? " << (empty >= fill) << std::endl;
-		std::cout << "Is B == to C ? " << (fill == copy) << std::endl;
+	// 	empty.show();
+	// 	fill.show();
+	// 	copy.show();
+	// 	std::cout << "Is A == to B ? " << (empty == fill) << std::endl;
+	// 	std::cout << "Is A != to B ? " << (empty != fill) << std::endl;
+	// 	std::cout << "Is A > than B ? " << (empty > fill) << std::endl;
+	// 	std::cout << "Is A >= than B ? " << (empty >= fill) << std::endl;
+	// 	std::cout << "Is B == to C ? " << (fill == copy) << std::endl;
 
-		ft::make_pair(42, 'A').show();
-	}
-
-	{
-		printTitle("Nodes");
-		ft::Node< ft::pair<std::string, int> >	empty;
-		ft::Node< ft::pair<std::string, int> >	valued(ft::make_pair("Ca va", 42), NULL);
-		ft::Node< ft::pair<std::string, int> >	copy(valued);
-
-		empty.show();
-		valued.show();
-		copy.show();
-		std::cout << "Is A == to B ? " << (empty == valued) << std::endl;
-		std::cout << "Is A != to B ? " << (empty != valued) << std::endl;
-		std::cout << "Is B == to C ? " << (valued == copy) << std::endl << std::endl;
-	}
+	// 	ft::make_pair(42, 'A').show();
+	// }
 
 	// {
-		// ft::RBTree< ft::pair<std::string, int> >	empty;
-		// ft::RBTree< ft::pair<std::string, int> >	comp(std::less<ft::pair<std::string, int> >);
-		
-		// std::cout << "Empty created !" << std::endl;
-		// std::cout << "Comp created !" << std::endl;
-		
-		// ft::pair<std::string, int>	fill("Hello", 42);
-		// empty.insert(fill);
+	// 	printTitle("Nodes");
+	// 	ft::Node< ft::pair<std::string, int> >	empty;
+	// 	ft::Node< ft::pair<std::string, int> >	valued(ft::make_pair("Ca va", 42), NULL);
+	// 	ft::Node< ft::pair<std::string, int> >	copy(valued);
+
+	// 	empty.show();
+	// 	valued.show();
+	// 	copy.show();
+	// 	std::cout << "Is A == to B ? " << (empty == valued) << std::endl;
+	// 	std::cout << "Is A != to B ? " << (empty != valued) << std::endl;
+	// 	std::cout << "Is B == to C ? " << (valued == copy) << std::endl << std::endl;
 	// }
+
+	{
+		ft::map<std::string, int>		tree;
+
+		printTitle("ft::map");
+		printSubTitle("Capacity");
+		std::cout << "Is the map empty : " << tree.empty() << std::endl;
+		std::cout << "Map size : " << tree.size() << std::endl;
+		std::cout << "Map max size : " << tree.max_size() << std::endl;
+
+		tree.value_comp();
+		tree.key_comp();
+		tree.get_allocator();
+
+		printSubTitle("Element access");
+		std::cout << "Adding some values" << std::endl;
+		tree.insert(ft::make_pair("aaaa", 1111));
+		tree.insert(ft::make_pair("bbbb", 2222));
+		tree.insert(ft::make_pair("cccc", 3333));
+		tree.insert(ft::make_pair("gggg", 4444));
+		tree.insert(ft::make_pair("zzzz", 5555));
+		// tree.print();
+		std::cout << "Is 'aaaa' in the map : " << tree["aaaa"] << std::endl;
+		std::cout << "Is 'pppp' in the map : " << tree["pppp"] << std::endl;
+		std::cout << "Assigning 9999 to the 'pppp' key" << std::endl;
+		tree["pppp"] = 9999;
+		// tree.print();
+		std::cout << "At 'bbbb' : " << tree.at("bbbb") << std::endl;
+		// std::cout << "At 'xxxx' : " << tree.at("xxxx") << std::endl;
+		
+		printSubTitle("Operations");
+		std::cout << "count('bbbb') : " << tree.count("bbbb") << std::endl;
+		std::cout << "count('uuuu') : " << tree.count("uuuu") << std::endl;
+		std::cout << "lower_bound('nnnn') " << (tree.lower_bound("nnnn"))->second << std::endl;
+		std::cout << "upper_bound('nnnn') " << (tree.upper_bound("nnnn"))->second << std::endl;
+		std::cout << "equal_bound('nnnn') " << (tree.equal_range("nnnn").first)->second << " | " << (tree.equal_range("nnnn").second)->second << std::endl;
+		tree.print();
+	}
+	
 }
 
 int	main(void)
@@ -417,46 +445,10 @@ int	main(void)
 			// Stack
 			// stackTests();
 		}
-
-		{
-		printTitle("ft::pair");
-		ft::pair<std::string, int>	empty;
-		ft::pair<std::string, int>	fill("Hello", 25);
-		ft::pair<std::string, int>	copy(fill);
-
-		empty.show();
-		fill.show();
-		copy.show();
-		std::cout << "Is A == to B ? " << (empty == fill) << std::endl;
-		std::cout << "Is A != to B ? " << (empty != fill) << std::endl;
-		std::cout << "Is A > than B ? " << (empty > fill) << std::endl;
-		std::cout << "Is A >= than B ? " << (empty >= fill) << std::endl;
-		std::cout << "Is B == to C ? " << (fill == copy) << std::endl;
-
-		ft::make_pair(42, 'A').show();
-	}
-
-	{
-		printTitle("Nodes");
-		ft::Node< ft::pair<std::string, int> >	empty;
-		ft::Node< ft::pair<std::string, int> >	valued(ft::make_pair("Ca va", 42), NULL);
-		ft::Node< ft::pair<std::string, int> >	copy(valued);
-
-		empty.show();
-		valued.show();
-		copy.show();
-		std::cout << "Is A == to B ? " << (empty == valued) << std::endl;
-		std::cout << "Is A != to B ? " << (empty != valued) << std::endl;
-		std::cout << "Is B == to C ? " << (valued == copy) << std::endl << std::endl;
-	}
 	
-	{
-		ft::map<std::string, int>		tree;
-		
-		std::cout << "Is the map empty : " << tree.empty() << std::endl;
-		std::cout << "Map size : " << tree.size() << std::endl;
-		std::cout << "Map max size : " << tree.max_size() << std::endl;
-	}
+		{
+			mapTests();
+		}
 
 	}
 	/*	OUTPUT AND DEBBUG	*/
