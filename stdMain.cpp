@@ -1,23 +1,13 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: npinheir <npinheir@student.s19.be>         +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/08/22 16:29:06 by npinheir          #+#    #+#             */
-/*   Updated: 2022/10/08 12:12:03 by npinheir         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
+#define VECTOR(T) std::vector<T>
+#define STACK(T) std::stack<T>
+#define MAP(T, P) std::map<T, P>
+#define NAMESPACE std
 
-#define VECTOR(T) ft::vector<T>
-#define STACK(T) ft::stack<T>
-#define MAP(T, P) ft::map<T, P>
-#define NAMESPACE ft
-
-#include "../include/stack/stack.hpp"
-#include "../include/map/map.hpp"
+#include <iostream>
 #include <sys/time.h>
+#include <vector>
+#include <stack>
+#include <map>
 
 void	printTitle(std::string title)
 {
@@ -141,6 +131,7 @@ void	iteratorTests(void)
 	std::cout << *b << "]" << std::endl;
 	std::cout << std::endl;
 
+	// rbegin() - rend()
 	printSubTitle("rbegin() - rend()");
 	printVector(vec);
 	std::cout << "rbegin() points to : " << *rb << std::endl;
@@ -364,41 +355,8 @@ void	printMap(MAP(T, P)& map)
 	for (typename MAP(T, P)::iterator it = map.begin(); it != map.end(); it++)
 		std::cout << "first : " << it->first << " | second : " << it->second << std::endl;
 }
-
 void	mapTests(void)
 {
-	// {
-	// 	printTitle("ft::pair");
-	// 	NAMESPACE::pair<std::string, int>	empty;
-	// 	NAMESPACE::pair<std::string, int>	fill("Hello", 25);
-	// 	NAMESPACE::pair<std::string, int>	copy(fill);
-
-	// 	empty.show();
-	// 	fill.show();
-	// 	copy.show();
-	// 	std::cout << "Is A == to B ? " << (empty == fill) << std::endl;
-	// 	std::cout << "Is A != to B ? " << (empty != fill) << std::endl;
-	// 	std::cout << "Is A > than B ? " << (empty > fill) << std::endl;
-	// 	std::cout << "Is A >= than B ? " << (empty >= fill) << std::endl;
-	// 	std::cout << "Is B == to C ? " << (fill == copy) << std::endl;
-
-	// 	// ft::make_pair(42, 'A').show();
-	// }
-
-	// {
-	// 	printTitle("Nodes");
-	// 	ft::Node< ft::pair<std::string, int> >	empty;
-	// 	ft::Node< ft::pair<std::string, int> >	valued(ft::make_pair("Ca va", 42), NULL);
-	// 	ft::Node< ft::pair<std::string, int> >	copy(valued);
-
-	// 	empty.show();
-	// 	valued.show();
-	// 	copy.show();
-	// 	std::cout << "Is A == to B ? " << (empty == valued) << std::endl;
-	// 	std::cout << "Is A != to B ? " << (empty != valued) << std::endl;
-	// 	std::cout << "Is B == to C ? " << (valued == copy) << std::endl << std::endl;
-	// }
-
 	{
 		MAP(std::string, int)		tree;
 
@@ -440,7 +398,6 @@ void	mapTests(void)
 		tree.clear();
 		printMap(tree);
 	}
-	
 }
 
 
@@ -466,7 +423,7 @@ int	main(void)
 
 		{
 			// Stack
-			// stackTests(); // LLEEAAKS
+			// stackTests();
 		}
 	
 		{
@@ -482,6 +439,6 @@ int	main(void)
 	double elapsed = seconds + microseconds * 1e-6;
 	printf("Time measured: %.3f seconds.\n", elapsed);
 	// std::cin.get();
-	// system("leaks ft_containers");
+	// system("leaks a.out");
 	return (0);
 }

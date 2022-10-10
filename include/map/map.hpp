@@ -34,8 +34,8 @@ namespace ft
 			typedef typename	allocator_type::const_pointer						const_pointer;
 			typedef typename	RBT_type::iterator									iterator;
 			typedef typename	RBT_type::const_iterator							const_iterator;
-			// typedef typename	RBT_type::reverse_iterator							reverse_iterator;
-			// typedef typename	RBT_type::const_reverse_iterator					const_reverse_iterator;
+			typedef				reverse_RBTIterator<iterator>						reverse_iterator;
+			typedef				reverse_RBTIterator<const_iterator>					const_reverse_iterator;
 			typedef				size_t												size_type;
 
 
@@ -56,11 +56,18 @@ namespace ft
 				_compare = other._compare;
 				_tree = other._tree;
 			}
-			~map() {}
+			~map() { clear(); }
 
 			// ITERATORS
 			iterator		begin() { return (_tree.begin()); }
 			iterator		end() { return (_tree.end()); }
+			const_iterator	begin() const { return (_tree.begin()); }
+			const_iterator	end() const { return (_tree.end()); }
+
+			reverse_iterator		rbegin() { return (_tree.rbegin()); }
+			reverse_iterator		rend() { return (_tree.rend()); }
+			const_reverse_iterator	rbegin() const { return (_tree.rbegin()); }
+			const_reverse_iterator	rend() const { return (_tree.rend()); }
 
 			// CAPACITY
 			bool		empty() const { return (_tree.empty()); }
@@ -90,9 +97,9 @@ namespace ft
 			template <class InputIterator>
 			void insert (InputIterator first, InputIterator last) { return (_tree.insert(first, last)); }
 
-			void erase (iterator position);								// NEED DELETION AND SEARCH
-			size_type erase (const key_type& k);						// NEED DELETION AND SEARCH
-			void erase (iterator first, iterator last);					// NEED DELETION AND SEARCH
+			void erase (iterator position) { return (_tree.erase(position)); }
+			size_type erase (const key_type& k) { return (_tree.erase(ft::make_pair(k, mapped_type()))); }
+			void erase (iterator first, iterator last) { return (_tree.erase(first, last)); }
 
 			void swap (map& x)
 			{
@@ -101,7 +108,7 @@ namespace ft
 				_tree = x._tree;
 			}
 
-			void clear();	// NEED DELETION
+			void clear() { erase(begin(), end()); }
 
 			// OBSERVERS
 			key_compare key_comp() const { return (_compare); }
@@ -109,6 +116,7 @@ namespace ft
 
 			// OPERATIONS
 			iterator find (const key_type& k) { return (_tree.find(ft::make_pair(k, mapped_type()))); }
+			const_iterator find( const Key& k ) const { return (_tree.find(ft::make_pair(k, mapped_type()))); }
 			size_type count (const key_type& k) const { return (_tree.count(ft::make_pair(k, mapped_type()))); }
 			iterator lower_bound (const key_type& k) { return (_tree.lower_bound(ft::make_pair(k, mapped_type()))); }
 			const_iterator lower_bound (const key_type& k) const { return (_tree.lower_bound(ft::make_pair(k, mapped_type()))); }
@@ -126,11 +134,19 @@ namespace ft
 				for (iterator it = begin(); it != end(); it++)
 					it.content().show();
 			}
-
 			void		print(void)
 			{
-				for (iterator it = begin(); it != end(); it++)
-					it->show();
+				iterator it = begin();
+				iterator ite = end();
+				for (; it != ite; it++)
+					std::cout << "first : " << it->first << " | " << "second : " << it->second << std::endl;
+			}
+			void		print_reverse(void)
+			{
+				reverse_iterator it = rbegin();
+				reverse_iterator ite = rend();
+				for (; it != ite; it++)
+					std::cout << "first : " << it->first << " | " << "second : " << it->second << std::endl;
 			}
 	};
 };

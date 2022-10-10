@@ -208,13 +208,13 @@ namespace ft
 			typedef typename iterator_traits<Iterator>::reference			reference;
 
 		private:
-			pointer	_ptr;
+			iterator_type	_ptr;
 
 		public:
-			reverse_iterator() : _ptr(NULL) {}
-			explicit reverse_iterator(iterator_type it) : _ptr(&(*it)) {}
+			reverse_iterator() : _ptr() {}
+			reverse_iterator(iterator_type it) : _ptr(it) {}
 			template <class Iter>
-			reverse_iterator(const reverse_iterator<Iter>& rev_it) : _ptr(rev_it.base()) {}
+			reverse_iterator(const reverse_iterator<Iterator>& rev_it) : _ptr(rev_it.base()) {}
 			virtual ~reverse_iterator() {}
 
 		public:
