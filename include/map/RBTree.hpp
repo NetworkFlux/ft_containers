@@ -28,15 +28,14 @@ namespace ft
 			size_t			_size;
 
 		public:
-			RBTree() : _alloc(node_allocator()), _comp(Compare()), _root(NULL), _size(0) {}
-			RBTree(const compare_type& comp, const node_allocator& alloc = node_allocator())
+			RBTree(const compare_type& comp = compare_type(), const node_allocator& alloc = node_allocator())
 				: _alloc(alloc), _comp(comp), _root(NULL), _size(0) {}
 			template<class InputIterator>
 			RBTree(typename ft::enable_if< !ft::is_integral<InputIterator>::value, InputIterator >::type first, InputIterator last,
 				const compare_type& comp, const node_allocator& alloc = node_allocator()) : _alloc(alloc), _comp(comp)
 			{
 				for (; first != last; ++first)
-					insert(*first);
+					insert(ft::make_pair(first->first, first->second));
 			}
 
 			~RBTree() { }
@@ -74,7 +73,6 @@ namespace ft
 					_alloc.construct(new_node, val);
 					add_node_to_tree(new_node, _root);
 					_size++;
-					// fix_tree(); // correct the tree
 					return (ft::make_pair(iterator(new_node), true));
 				}
 			}
@@ -107,7 +105,7 @@ namespace ft
 			void insert(typename ft::enable_if< !ft::is_integral<InputIterator>::value, InputIterator >::type first, InputIterator last)
 			{
 				for (; first != last; ++first)
-					insert(*first);
+					insert(ft::make_pair(first->first, first->second));
 			}
 
 			void	erase(iterator position)
@@ -139,7 +137,7 @@ namespace ft
 
 			void	clear(void)
 			{
-				clear_node(_root);
+				clear_node();
 				_size = 0;
 			}
 
@@ -194,7 +192,7 @@ namespace ft
 			{
 				if (!n)
 					return (NULL);
-				while (n->left)
+				while (n->left != NULL)
 					n = n->left;
 				return (n);
 			}
@@ -343,16 +341,10 @@ namespace ft
 				y->left = node;
 				node->parent = y;
 			}
-			void			clear_node(node_pointer node)
+			void			clear_node(void)
 			{
-				if (node)
-				{
-					clear_node(node->right);
-					clear_node(node->left);
-					allocator_type().destroy(node->pair);
-					allocator_type().deallocate(node->pair, 1);
-					_alloc.deallocate(node, 1);
-				}
+				for (iterator it = begin(); it != end(); it++)
+					erase(it.base());
 			}
 			node_pointer	last_node(void) const
 			{

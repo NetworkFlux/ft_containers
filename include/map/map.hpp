@@ -14,18 +14,19 @@ namespace ft
 			typedef				Compare												key_compare;
 			typedef				Alloc												allocator_type;
 
-		private:
 			class pair_compare
 			{
-				key_compare _compare;
+				friend class map <key_type, mapped_type, key_compare, allocator_type>;
+
+				protected:
+					key_compare _compare;
 
 				public:
-					pair_compare(const key_compare & compare) : _compare(compare) {}
+					pair_compare(const key_compare & compare = key_compare()) : _compare(compare) {}
 
 					bool operator()(const value_type & x, const value_type & y) const { return (_compare(x.first, y.first)); }
-		};
+			};
 
-		public:
 			typedef				pair_compare										value_compare;
 			typedef				RBTree<value_type, value_compare, allocator_type>	RBT_type;
 			typedef typename	allocator_type::reference							reference;
@@ -56,7 +57,6 @@ namespace ft
 				_compare = other._compare;
 				_tree = other._tree;
 			}
-			~map() { clear(); }
 
 			// ITERATORS
 			iterator		begin() { return (_tree.begin()); }

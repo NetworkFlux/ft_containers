@@ -52,6 +52,8 @@ namespace ft
 			RBTIterator			operator++(int)
 			{
 				RBTIterator<value_type> temp = *this;
+				if (!_node)
+					return (temp);
 				if (_node->right)
 					_node = tree_min(_node->right);
 				else
@@ -160,10 +162,10 @@ namespace ft
 			--base_iterator;
 			return(*this);
 		}
-		reverse_RBTIterator  operator++(int)
+		reverse_RBTIterator operator++(int)
 		{
 			reverse_RBTIterator temp = *this;
-			++(*this);
+			--base_iterator;
 			return temp;	
 		}
 		reverse_RBTIterator& operator+= (difference_type n){
@@ -178,9 +180,9 @@ namespace ft
 			++base_iterator;
 			return(*this);
 		}
-		reverse_RBTIterator  operator--(int){
+		reverse_RBTIterator operator--(int){
 			reverse_RBTIterator temp = *this;
-			--(*this);
+			++base_iterator;
 			return temp;
 		}
 		reverse_RBTIterator& operator-= (difference_type n){
