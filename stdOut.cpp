@@ -360,6 +360,6 @@ int		main(void)
 	double elapsed = seconds + microseconds * 1e-6;
 	printf("Time measured: %.3f seconds.\n", elapsed);
 	// std::cin.get();
-	// system("leaks a.out");
+	system("leaks a.out");
 	return (0);
 }

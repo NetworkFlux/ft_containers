@@ -56,9 +56,11 @@ namespace ft
 				for (; first != last; ++first)
 					insert(ft::make_pair(first->first, first->second));
 			}
-
-
-
+			Tree(const Tree& other)
+			{
+				clear();
+				insert(other.begin(), other.end());
+			}
 			~Tree()
 			{
 				erase(begin(), end());
