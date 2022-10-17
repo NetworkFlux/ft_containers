@@ -1,11 +1,12 @@
-#include <sys/time.h>
+#include <iostream>
 #include <vector>
-#include "../include/map/map.hpp"
+#include <sys/time.h>
+#include <map>
 
-#define NAMESPACE ft
-#define PAIR(U, V) NAMESPACE::pair<U, V>
-#define NODE(T) NAMESPACE::Node<T>
-#define TREE(T) NAMESPACE::Tree<T>
+#define NAMESPACE std
+// #define PAIR(U, V) NAMESPACE::pair<U, V>
+// #define NODE(T) NAMESPACE::Node<T>
+// #define TREE(T) NAMESPACE::Tree<T>
 #define MAP(T, P) NAMESPACE::map<T, P>
 
 // -- OUTPUT MANAGING --
@@ -30,30 +31,30 @@ void	printInfo(std::string info)
 {
 	std::cout << "\033[33m" << info << "\033[0m" << std::endl;
 }
-template <class U, class V>
-void	printPair(const PAIR(U, V)& pair, const std::string& name)
-{
-	std::cout << name << " : (" << pair.first << "; " << pair.second << ")" << std::endl;
-}
-template <class T>
-void	printNode(const NODE(T)& node)
-{
-	if (node.pair)
-		printPair(*(node.pair), "Pair");
-	else
-		std::cout << "Empty" << std::endl;
-	std::cout << "Has parent : " << node.parent << std::endl;
-	std::cout << "Has left child : " << node.left << std::endl;
-	std::cout << "Has right child : " << node.right << std::endl;
-	std::cout << "Colored : " << node.color << std::endl;
-	std::cout << "Is nil : " << node.is_nil << std::endl << std::endl;
-}
-template <class T>
-void	printTree(TREE(T)& tree)
-{
-	for (typename ft::Tree<T>::iterator it = tree.begin(); it != tree.end(); it++)
-		printNode(*(it.base()));
-}
+// template <class U, class V>
+// void	printPair(const PAIR(U, V)& pair, const std::string& name)
+// {
+// 	std::cout << name << " : (" << pair.first << "; " << pair.second << ")" << std::endl;
+// }
+// template <class T>
+// void	printNode(const NODE(T)& node)
+// {
+// 	if (node.pair)
+// 		printPair(*(node.pair), "Pair");
+// 	else
+// 		std::cout << "Empty" << std::endl;
+// 	std::cout << "Has parent : " << node.parent << std::endl;
+// 	std::cout << "Has left child : " << node.left << std::endl;
+// 	std::cout << "Has right child : " << node.right << std::endl;
+// 	std::cout << "Colored : " << node.color << std::endl;
+// 	std::cout << "Is nil : " << node.is_nil << std::endl << std::endl;
+// }
+// template <class T>
+// void	printTree(TREE(T)& tree)
+// {
+// 	for (typename ft::Tree<T>::iterator it = tree.begin(); it != tree.end(); it++)
+// 		printNode(*(it.base()));
+// }
 template <class T, class P>
 void	printMap(MAP(T, P)& map)
 {
@@ -65,126 +66,6 @@ void	printMap(MAP(T, P)& map)
 	for (typename MAP(T, P)::iterator it = map.begin(); it != map.end(); it++)
 		std::cout << "first : " << it->first << " | second : " << it->second << std::endl;
 	std::cout << "Map size : " << map.size() << std::endl;
-}
-
-// -- PAIR --
-void	pairTests(void)
-{
-	printTitle("FT::PAIR");
-
-	printSubTitle("Default constructor");
-	PAIR(std::string, int)	a;
-	printPair(a, "a");
-	std::cout << std::endl;
-
-	printSubTitle("Initialization constructor");
-	PAIR(std::string, int)	b("Hi", 1010);
-	printPair(b, "b");
-	std::cout << std::endl;
-
-	printSubTitle("Copy constructor");
-	PAIR(std::string, int)	c(b);
-	printPair(c, "c");
-	std::cout << std::endl;
-
-	printSubTitle("Operator =");
-	PAIR(std::string, int)	d = c;
-	printPair(d, "d");
-	std::cout << std::endl;
-
-	printSubTitle("Relational Operators");
-	PAIR(std::string, int)	low("aaa", 0);
-	PAIR(std::string, int)	middle("bbb", 1);
-	PAIR(std::string, int)	high("ccc", 2);
-	printPair(low, "low");
-	printPair(middle, "middle");
-	printPair(high, "high");
-	std::cout << std::endl;
-	std::cout << "low == middle : " << (low == middle) << std::endl;
-	std::cout << "low == low : " << (low == low) << std::endl;
-	std::cout << "low != middle : " << (low != middle) << std::endl;
-	std::cout << "low != low : " << (low != low) << std::endl;
-	std::cout << "low < middle : " << (low < middle) << std::endl;
-	std::cout << "high < middle : " << (high < middle) << std::endl;
-	std::cout << "middle <= middle : " << (middle <= middle) << std::endl;
-	std::cout << "high <= middle : " << (high <= middle) << std::endl;
-	std::cout << "high > low : " << (high > low) << std::endl;
-	std::cout << "middle > high : " << (middle > high) << std::endl;
-	std::cout << "high >= high : " << (high >= high) << std::endl;
-	std::cout << "low >= middle : " << (low >= middle) << std::endl << std::endl;
-}
-
-// -- MAKE_PAIR --
-void	makePairTests(void)
-{
-	printTitle("FT::MAKE_PAIR");
-
-	printInfo("Doing the same tests as ft::pair but using ft::make_pair");
-	PAIR(std::string, int)	mp = NAMESPACE::make_pair("Hi", 1010);
-	printPair(mp, "mp");
-	std::cout << std::endl;
-
-	printSubTitle("Relational Operators");
-	PAIR(std::string, int)	low = NAMESPACE::make_pair("aaa", 0);
-	PAIR(std::string, int)	middle = NAMESPACE::make_pair("bbb", 1);
-	PAIR(std::string, int)	high = NAMESPACE::make_pair("ccc", 2);
-	printPair(low, "low");
-	printPair(middle, "middle");
-	printPair(high, "high");
-	std::cout << std::endl;
-	std::cout << "low == middle : " << (low == middle) << std::endl;
-	std::cout << "low == low : " << (low == low) << std::endl;
-	std::cout << "low != middle : " << (low != middle) << std::endl;
-	std::cout << "low != low : " << (low != low) << std::endl;
-	std::cout << "low < middle : " << (low < middle) << std::endl;
-	std::cout << "high < middle : " << (high < middle) << std::endl;
-	std::cout << "middle <= middle : " << (middle <= middle) << std::endl;
-	std::cout << "high <= middle : " << (high <= middle) << std::endl;
-	std::cout << "high > low : " << (high > low) << std::endl;
-	std::cout << "middle > high : " << (middle > high) << std::endl;
-	std::cout << "high >= high : " << (high >= high) << std::endl;
-	std::cout << "low >= middle : " << (low >= middle) << std::endl << std::endl;
-}
-
-// -- NODE --
-void	nodeTests(void)
-{
-	printTitle("NODE");
-	printSubTitle("Constructors and memory checks");
-	std::cout << std::endl;
-	NODE(PAIR(std::string, int))	node1(NAMESPACE::make_pair("HI", 1010));
-	NODE(PAIR(std::string, int))	node2(node1);
-	NODE(PAIR(std::string, int))	node3 = node2;
-	NODE(PAIR(std::string, int))	node4(NAMESPACE::make_pair("HELLO", 2020));
-	printNode(node1);
-	printNode(node2);
-	printNode(node3);
-	printNode(node4);
-	printSubTitle("Relational Operators");
-	std::cout << std::endl;
-	std::cout << "node1 == node2 : " << (node1 == node2) << std::endl;
-	std::cout << "node3 == node4 : " << (node3 == node4 ) << std::endl;
-	std::cout << "node1 != node2 : " << (node1 != node2) << std::endl;
-	std::cout << "node3 != node4 : " << (node3 != node4 ) << std::endl << std::endl;
-}
-
-// -- RED BLACK TREE --
-void	treeTests(void)
-{
-	printTitle("RED BLACK TREE");
-	printSubTitle("Constructors and memory checks");
-	TREE(PAIR(std::string, int))	tree;
-	std::cout << "Current size is : " << tree.size() << std::endl;
-	tree.insert(NAMESPACE::make_pair("BO", 123));
-	tree.insert(NAMESPACE::make_pair("AO", 234));
-	tree.insert(NAMESPACE::make_pair("CO", 345));
-	tree.insert(NAMESPACE::make_pair("CO", 456));
-	std::cout << "Current size is : " << tree.size() << std::endl;
-	tree.insert(NAMESPACE::make_pair("DO", 567));
-	printTree(tree);
-	std::cout << "Current size is : " << tree.size() << std::endl;
-	std::cout << std::endl;
-	printTree(tree);
 }
 
 template <class T, class P>
@@ -479,6 +360,6 @@ int		main(void)
 	double elapsed = seconds + microseconds * 1e-6;
 	printf("Time measured: %.3f seconds.\n", elapsed);
 	// std::cin.get();
-	system("leaks ft_containers");
+	// system("leaks a.out");
 	return (0);
 }
