@@ -86,7 +86,7 @@ namespace ft
 		public:
 			// Iterators
 			iterator		begin() { return (iterator(tree_min(_root), _begin, _end)); }
-			const_iterator	begin() const { return (const_iterator(_begin, _begin, _end)); }
+			const_iterator	begin() const { return (const_iterator(tree_min(_root), _begin, _end)); }
 			iterator		end() { return (iterator(NULL, _begin, _end)); }
 			const_iterator	end() const { return (const_iterator(NULL, _begin, _end)); }
 

@@ -1,8 +1,11 @@
 #include <sys/time.h>
-#include <vector>
+#include "../include/stack/stack.hpp"
 #include "../include/map/map.hpp"
+#include <map>
 
 #define NAMESPACE ft
+#define VECTOR(T) NAMESPACE::vector<T>
+#define STACK(T) NAMESPACE::stack<T>
 #define PAIR(U, V) NAMESPACE::pair<U, V>
 #define NODE(T) NAMESPACE::Node<T>
 #define TREE(T) NAMESPACE::Tree<T>
@@ -30,6 +33,40 @@ void	printInfo(std::string info)
 {
 	std::cout << "\033[33m" << info << "\033[0m" << std::endl;
 }
+
+// -- VECTOR OUTPUT --
+template <class T>
+void	printVector(VECTOR(T)& vec)
+{
+	if (vec.size() == 0)
+		std::cout << "\033[32m Vector content : \033[0m[]" << std::endl;
+	else
+	{
+		std::cout << "\033[32m Vector content : \033[0m[";
+		for (size_t i = 0; i < vec.size() - 1; i++)
+			std::cout << vec[i] << " ";
+		std::cout << vec[vec.size() - 1] << "]"<< " --- size = " << vec.size() << std::endl;
+	}
+}
+
+// -- STACK OUTPUT--
+template <class T>
+void	printStack(STACK(T)& stack)
+{
+	STACK(T)	stack2(stack);
+	if (stack2.size() == 0)
+		return ;
+	else
+	{
+		int x = stack2.top();
+		stack2.pop();
+		printStack(stack2);
+		std::cout << x << " ";
+		stack2.push(x);
+	}
+}
+
+// -- MAP OUTPUT --
 template <class U, class V>
 void	printPair(const PAIR(U, V)& pair, const std::string& name)
 {
@@ -67,7 +104,315 @@ void	printMap(MAP(T, P)& map)
 	std::cout << "Map size : " << map.size() << std::endl;
 }
 
-// -- PAIR --
+// -- VECTOR TESTS --
+template <class T>
+void	vectorAllocationProof(VECTOR(T)& vec, std::string name, std::string param)
+{
+	std::cout << "Vector " << name << "( " << param << " ) was initialize with Size : " << vec.size() << " and Capacity : " << vec.capacity() << std::endl;
+	printInfo("Doing some push_back() to add values and see how the container reacts");
+	std::cout << "\033[32m Allocation Proof\033[0m" << std::endl;
+	printInfo("1 value added");
+	vec.push_back(10);
+	std::cout << name << ": size = " << vec.size() << "; capacity = " << vec.capacity() << std::endl;
+	printInfo("1 value added");
+	vec.push_back(10);
+	std::cout << name << ": size = " << vec.size() << "; capacity = " << vec.capacity() << std::endl;
+	printInfo("2 value added");
+	vec.push_back(10);
+	vec.push_back(10);
+	std::cout << name << ": size = " << vec.size() << "; capacity = " << vec.capacity() << std::endl;
+	printInfo("3 value added");
+	vec.push_back(10);
+	vec.push_back(10);
+	vec.push_back(10);
+	std::cout << name << ": size = " << vec.size() << "; capacity = " << vec.capacity() << std::endl;
+	printInfo("3 value added");
+	vec.push_back(10);
+	vec.push_back(10);
+	vec.push_back(10);
+	std::cout << name << ": size = " << vec.size() << "; capacity = " << vec.capacity() << std::endl << std::endl;
+	printVector(vec);
+	std::cout << std::endl;
+}
+void	vectorConstructor(void)
+{
+	printTitle("CONSTRUCTORS");
+	printSubTitle("DEFAULT CONSTRUCTOR");
+	VECTOR(int)	empty;
+	vectorAllocationProof(empty, "Empty", "");
+
+	printSubTitle("FILL CONSTRUCTOR");
+	VECTOR(int)	fill(9, 20);
+	vectorAllocationProof(fill, "Fill", "9, 20");
+
+	VECTOR(int)::iterator	first = fill.begin();
+	VECTOR(int)::iterator	last = fill.end();
+	printSubTitle("RANGE CONSTRUCTOR");
+	VECTOR(int)	range(first, last);
+	vectorAllocationProof(range, "Range", "first{Fill iterator}, last{Fill iterator}");
+
+	printSubTitle("COPY CONSTRUCTOR");
+	VECTOR(int)	copy(fill);
+	vectorAllocationProof(copy, "Copy", "Fill");
+}
+void	vectorIterator(void)
+{
+	printTitle("ITERATORS");
+	printSubTitle("begin() - end()");
+	VECTOR(int)	vec;
+	for (size_t i = 0; i < 5; i++)
+		vec.push_back(i);
+	VECTOR(int)::iterator	b = vec.begin();
+	VECTOR(int)::iterator	e = vec.end();
+
+	VECTOR(int)::reverse_iterator	rb = vec.rbegin();
+	VECTOR(int)::reverse_iterator	re = vec.rend();
+
+	printVector(vec);
+	std::cout << "begin() points to : " << *b << std::endl;
+	std::cout << "end() points to : " << *e << std::endl;
+	std::cout << "end() - 1 points to : " << *(e - 1) << std::endl;
+	std::cout << "Looping through the vector using iterators : [";
+	while (b != e - 1)
+	{
+		std::cout << *b << " ";
+		b++;
+	}
+	std::cout << *b << "]" << std::endl;
+	std::cout << "Modifying values using iterators : [";
+	b = vec.begin();
+	while (b != e - 1)
+	{
+		*b = *b * *b;
+		std::cout << *b << " ";
+		b++;
+	}
+	*b = *b * *b;
+	std::cout << *b << "]" << std::endl;
+	std::cout << std::endl;
+
+	printSubTitle("rbegin() - rend()");
+	printVector(vec);
+	std::cout << "rbegin() points to : " << *rb << std::endl;
+	std::cout << "rend() - 1 points to : " << *(re - 1) << std::endl;
+	std::cout << "Looping through the vector using reverse iterators : [";
+	while (rb != re - 1)
+	{
+		std::cout << *rb << " ";
+		rb++;
+	}
+	std::cout << *rb << "]" << std::endl;
+	std::cout << "Modifying values using reverse iterators : [";
+	rb = vec.rbegin();
+	while (rb != re - 1)
+	{
+		*rb = *rb * *rb;
+		std::cout << *rb << " ";
+		rb++;
+	}
+	*rb = *rb * *rb;
+	std::cout << *rb << "]" << std::endl;
+	std::cout << std::endl;
+}
+void	vectorCapacity(void)
+{
+	printTitle("CAPACITY");
+	VECTOR(std::string)	vec(5, "Hello");
+	printVector(vec);
+	printSubTitle("size()");
+	std::cout << "Vector size : " << vec.size() << std::endl;
+	printSubTitle("max_size()");
+	std::cout << "Vector max size : " << vec.max_size() << std::endl;
+	printSubTitle("resize(3)");
+	vec.resize(3);
+	printVector(vec);
+	std::cout << "Vector new size : " << vec.size() << " and new capacity : " << vec.capacity() << std::endl;
+	printSubTitle("resize(6, 'yo')");
+	vec.resize(6, "yo");
+	printVector(vec);
+	std::cout << "Vector new size : " << vec.size() << " and new capacity : " << vec.capacity() << std::endl;
+	printSubTitle("capacity()");
+	std::cout << "Vector capacity : " << vec.capacity() << std::endl;
+	printSubTitle("empty()");
+	std::cout << "Vector is empty : " << vec.empty() << std::endl;
+	printSubTitle("reserve(12)");
+	vec.reserve(12);
+	std::cout << "Vector new capacity : " << vec.capacity() << std::endl;
+	printSubTitle("reserve(5)");
+	vec.reserve(5);
+	std::cout << "Vector new capacity : " << vec.capacity() << std::endl;
+}
+void	vectorElementAccess(void)
+{
+	printTitle("ELEMENT ACCESS");
+	VECTOR(double)	vec;
+	for (size_t i = 0; i < 5; i++)
+		vec.push_back(i + 1.2);
+	printVector(vec);
+	printSubTitle("at(4)");
+	std::cout << "Accessing 4th element using at : " << vec.at(4) << std::endl;
+	// std::cout << "Accessing out of range element using at : " << vec.at(8) << std::endl;
+	printSubTitle("front()");
+	std::cout << "Accessing the front element : " << vec.front() << std::endl;
+	printSubTitle("back()");
+	std::cout << "Accessing the back element : " << vec.back() << std::endl;
+	printSubTitle("data()");
+	void	*ptr;
+	ptr = vec.data();
+	std::cout << "Address of the first element using operator []: " << &(vec[0]) << " -- Address of the first element using data(): " << ptr << std::endl;
+}
+void	vectorModifiers(void)
+{
+	printTitle("MODIFIERS");
+	VECTOR(int)	vec(5, 42);
+	VECTOR(int)	vec2(6, 666);
+	VECTOR(int)::iterator	first2 = vec2.begin();
+	VECTOR(int)::iterator	end2 = vec2.end();
+
+	printVector(vec);
+	printVector(vec2);
+	printSubTitle("assign(first, last) -- range ");
+	vec.assign(first2, end2);
+	printVector(vec);
+	std::cout << "Infos after the assign; size : " << vec.size() << " capacity : " << vec.capacity() << std::endl;
+	printSubTitle("assign(8, 12) -- fill ");
+	vec.assign(8, 12);
+	printVector(vec);
+	std::cout << "Infos after the assign; size : " << vec.size() << " capacity : " << vec.capacity() << std::endl;
+	printSubTitle("assign(4, 10) -- fill ");
+	vec.assign(4, 10);
+	printVector(vec);
+	std::cout << "Infos after the assign; size : " << vec.size() << " capacity : " << vec.capacity() << std::endl;
+	vec = VECTOR(int)(5, 42);
+	printVector(vec);
+	printSubTitle("push_back()");
+	printInfo("3 value added");
+	vec.push_back(13);
+	vec.push_back(14);
+	vec.push_back(15);
+	printVector(vec);
+	std::cout << "Infos after the push_back; size : " << vec.size() << " capacity : " << vec.capacity() << std::endl;
+	printSubTitle("pop_back()");
+	printInfo("2 value removed");
+	vec.pop_back();
+	vec.pop_back();
+	printVector(vec);
+	std::cout << "Infos after the pop_back(); size : " << vec.size() << " capacity : " << vec.capacity() << std::endl;
+	printSubTitle("insert(second_elem, 100) -- single element");
+	VECTOR(int)::iterator	first = vec.begin();
+	first++;
+	vec.insert(first, 100);
+	printVector(vec);
+	std::cout << "Infos after the insert; size : " << vec.size() << " capacity : " << vec.capacity() << std::endl;
+	printSubTitle("insert(second_elem, 5, 1) -- fill");
+	vec.insert(++vec.begin(), 5, 1);
+	printVector(vec);
+	std::cout << "Infos after the range insert; size : " << vec.size() << " capacity : " << vec.capacity() << std::endl;
+	printSubTitle("insert(first_elem, first, last) -- range");
+	vec.insert(vec.begin(), vec2.begin(), vec2.end());
+	printVector(vec);
+	std::cout << "Infos after the range insert; size : " << vec.size() << " capacity : " << vec.capacity() << std::endl;
+	printSubTitle("erase(second element)");
+	printVector(vec);
+	first = vec.begin();
+	vec.erase(first);
+	std::cout << "Infos after the erase; size : " << vec.size() << " capacity : " << vec.capacity() << std::endl;
+	printVector(vec);
+	printSubTitle("erase(second element to fifth)");
+	printVector(vec);
+	first = vec.begin();
+	VECTOR(int)::iterator	second = first + 3;
+	vec.erase(first, second);
+	std::cout << "Infos after the erase; size : " << vec.size() << " capacity : " << vec.capacity() << std::endl;
+	printVector(vec);
+	printSubTitle("swap()");
+	VECTOR(int)	vec1(5, 10);
+	VECTOR(int)	vec3(3, 50);
+	printVector(vec1);
+	printVector(vec3);
+	std::cout << "Vectors after the swap :" << std::endl;
+	vec1.swap(vec3);
+	printVector(vec1);
+	printVector(vec3);
+	printSubTitle("clear()");
+	printVector(vec);
+	std::cout << "Infos before the clear; size : " << vec.size() << " capacity : " << vec.capacity() << std::endl;
+	vec.clear();
+	printVector(vec);
+	std::cout << "Infos after the clear; size : " << vec.size() << " capacity : " << vec.capacity() << std::endl;
+}
+void	vectorRelationalOperators(void)
+{
+	VECTOR(float)	vec1(5, 10.2);
+	VECTOR(float)	vec2(7, 14.2);
+
+	printTitle("Relational Operators");
+	printVector(vec1);
+	printVector(vec2);
+	printSubTitle(" == " );
+	std::cout << "Are vector 1 and vector 2 equal : " << (vec1 == vec2) << std::endl;
+	printSubTitle(" != ");
+	std::cout << "Are vector 1 and vector 2 not equal : " << (vec1 != vec2) << std::endl;
+	printSubTitle(" > ");
+	std::cout << "Is vector 1 greater than vector 2 : " << (vec1 > vec2) << std::endl;
+	printSubTitle(" >= ");
+	std::cout << "Is vector 1 greater or equal than vector 2 : " << (vec1 >= vec2) << std::endl;
+	printSubTitle(" < ");
+	std::cout << "Is vector 1 less than vector 2 : " << (vec1 < vec2) << std::endl;
+	printSubTitle(" <= ");
+	std::cout << "Is vector 1 less or equal than vector 2 : " << (vec1 <= vec2) << std::endl;
+}
+
+// -- STACK TESTS --
+void	stackTests(void)
+{
+	STACK(int)	stack1;
+	STACK(int)	stack2(stack1);
+
+	printTitle("Stack Tests");
+	printStack(stack1);
+	printStack(stack2);
+	printSubTitle("empty");
+	std::cout << "Is the stack empty : " << stack1.empty() << std::endl;
+	printSubTitle("push and size");
+	for (int i = 1; i < 6; i++)
+		stack1.push(i);
+	printStack(stack1);
+	std::cout << "Infos after pushing ; size : " << stack1.size() << std::endl;
+	printSubTitle("top");
+	std::cout << "Element at the top of the stack : " << stack1.top() << std::endl;
+	printSubTitle("pop");
+	stack1.pop();
+	printStack(stack1);
+	std::cout << "Infos after poping ; size : " << stack1.size() << std::endl;
+}
+void	stackRealtionalOperators(void)
+{
+	VECTOR(int)	vec1(2, 10);
+	VECTOR(int)	vec2(1, 14);
+	STACK(int)	stack1(vec1);
+	STACK(int)	stack2(vec2);
+
+	printTitle("Relational Operators");
+	printStack(stack1);
+	std::cout << std::endl;
+	printStack(stack2);
+	std::cout << std::endl;
+	printSubTitle(" == " );
+	std::cout << "Are stack 1 and stack 2 equal : " << (stack1 == stack2) << std::endl;
+	printSubTitle(" != ");
+	std::cout << "Are stack 1 and stack 2 not equal : " << (stack1 != stack2) << std::endl;
+	printSubTitle(" > ");
+	std::cout << "Is stack 1 greater than stack 2 : " << (stack1 > stack2) << std::endl;
+	printSubTitle(" >= ");
+	std::cout << "Is stack 1 greater or equal than stack 2 : " << (stack1 >= stack2) << std::endl;
+	printSubTitle(" < ");
+	std::cout << "Is stack 1 less than stack 2 : " << (stack1 < stack2) << std::endl;
+	printSubTitle(" <= ");
+	std::cout << "Is stack 1 less or equal than stack 2 : " << (stack1 <= stack2) << std::endl;
+}
+
+// -- PAIR TESTS --
 void	pairTests(void)
 {
 	printTitle("FT::PAIR");
@@ -114,7 +459,7 @@ void	pairTests(void)
 	std::cout << "low >= middle : " << (low >= middle) << std::endl << std::endl;
 }
 
-// -- MAKE_PAIR --
+// -- MAKE_PAIR TESTS --
 void	makePairTests(void)
 {
 	printTitle("FT::MAKE_PAIR");
@@ -146,7 +491,7 @@ void	makePairTests(void)
 	std::cout << "low >= middle : " << (low >= middle) << std::endl << std::endl;
 }
 
-// -- NODE --
+// -- NODE TESTS --
 void	nodeTests(void)
 {
 	printTitle("NODE");
@@ -168,7 +513,7 @@ void	nodeTests(void)
 	std::cout << "node3 != node4 : " << (node3 != node4 ) << std::endl << std::endl;
 }
 
-// -- RED BLACK TREE --
+// -- RED BLACK TREE TESTS--
 void	treeTests(void)
 {
 	printTitle("RED BLACK TREE");
@@ -187,6 +532,7 @@ void	treeTests(void)
 	printTree(tree);
 }
 
+// -- MAP TESTS --
 template <class T, class P>
 void	mapAllocationProof(MAP(T, P)& map, std::string name, std::string param, int i)
 {
@@ -455,12 +801,22 @@ int		main(void)
 
 	// -- TESTS --
 	{
+		// Vector
+		vectorConstructor();
+		vectorIterator();
+		vectorCapacity();
+		vectorElementAccess();
+		vectorModifiers();
+		vectorRelationalOperators();
+
+		// Stack
+		stackTests();
+		stackRealtionalOperators();
+
+		// Map
 		// pairTests();
-
 		// makePairTests();
-
 		// nodeTests();
-
 		// treeTests();
 
 		mapConstructor();
@@ -470,6 +826,8 @@ int		main(void)
 		mapModifiers();
 		mapObservers();
 		mapOperations();
+
+		// test();
 	}
 
 	// -- MAIN END --
@@ -479,6 +837,6 @@ int		main(void)
 	double elapsed = seconds + microseconds * 1e-6;
 	printf("Time measured: %.3f seconds.\n", elapsed);
 	// std::cin.get();
-	system("leaks ft_containers");
+	// system("leaks ft_containers");
 	return (0);
 }

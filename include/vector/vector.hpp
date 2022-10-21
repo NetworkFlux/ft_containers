@@ -38,15 +38,16 @@ namespace ft
 			explicit vector (const allocator_type& alloc = allocator_type()) : _container(NULL), _size(0), _capacity(0), _allocator(alloc) {}
 			explicit vector (size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type()) : _size(n), _capacity(n), _allocator(alloc)
 			{
-				_container = _allocator.allocate(n);
-				for (size_type i = 0; i < n; i++)
-					_allocator.construct(_container + i, val);
+				if (n > 0)
+				{
+					_container = _allocator.allocate(n);
+					for (size_type i = 0; i < n; i++)
+						_allocator.construct(_container + i, val);
+				}
 			}
-			vector (const vector& x) : _size(x._size), _capacity(x._size), _allocator(x._allocator)
+			vector (const vector& x) : _size(0), _capacity(0)
 			{
-				_container = _allocator.allocate(x._size);
-				for (size_t i = 0; i < _size; i++)
-					_allocator.construct(_container + i, x._container[i]);
+				*this = x;
 			}
 			template <class InputIterator>
 			vector (InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type(),
@@ -104,15 +105,21 @@ namespace ft
 			size_type	max_size() const { return (allocator_type().max_size()); }
 			void		resize (size_type n, value_type val = value_type())
 			{
-				if (n < _size)
+				if(n < _size)
 				{
-					while (_size > n)
-						_allocator.destroy(_container + (_size-- - 1));
+					for(size_type i = n; i < _size; i++)
+						_allocator.destroy(_container + i);
+					_size = n;
 				}
-				else
+				else if (n > _size)
 				{
-					for (size_t i = _size; i < n; i++)
-						push_back(val);
+					if (_capacity < n)
+						reserve(_capacity * 2 > n ? _capacity * 2 : n);
+					for (size_type i = _size; i < n; i++)
+					{
+						_allocator.construct(_container + i, val);
+						_size++;
+					}
 				}
 			}
 			size_type	capacity() const { return (_capacity); }
@@ -207,143 +214,165 @@ namespace ft
 					_allocator.destroy(_container + --_size);
 			}
 			iterator	insert(iterator position, const_reference val)
-			{
-				pointer		new_container;
-				iterator	first = begin();
-				iterator	res;
-				iterator	last = end(); 
-				size_t		i = 0;
-
-				
-				if (_size >= _capacity)
+			{ 
+				if (position < begin() || position > end())
+					throw (std::logic_error("vector"));
+				difference_type	start = position - begin();
+				if (_size == _capacity)
 				{
-					reallocate(_capacity * 2);
-					new_container = _allocator.allocate(_capacity * 2);
+					_capacity = _capacity * 2 + (_capacity == 0);
+					pointer new_arr = _allocator.allocate(_capacity);
+					std::uninitialized_copy(begin(), position, iterator(new_arr));
+					_allocator.construct(new_arr + start, val);
+					std::uninitialized_copy(position, end(), iterator(new_arr + start + 1));
+					for (size_t i = 0; i < _size; i++)
+						_allocator.destroy(_container + i);
+					if (_size)
+						_allocator.deallocate(_container, _size);
+					_size++;
+					_container = new_arr;
 				}
 				else
-					new_container = _allocator.allocate(_capacity);
-				while (first != position)
 				{
-					new_container[i++] = *first;
-					++first;
+					for (size_type i = _size; i > static_cast<size_type>(start); i--)
+					{
+						_allocator.destroy(_container + i);
+						_allocator.construct(_container + i, *(_container + i - 1));
+					}
+					_allocator.destroy(&(*position));
+					_allocator.construct(&(*position), val);
+					_size++;
 				}
-				new_container[i] = val;
-				res = iterator(&new_container[i++]);
-				while (position != last)
-				{
-					new_container[i++] = *position;
-					++position;
-				}
-				clearContainer();
-				_container = new_container;
-				_size++;
-				return (res);
+				return (begin() + start);
 			}
 			void		insert(iterator position, size_type n, const_reference val)
 			{
-				pointer		new_container;
-				iterator	first = begin();
-				iterator	last = end();
-				iterator	res;
-				size_t		i = 0;
-
-				while (_size + n > _capacity)
-					reallocate(_capacity * 2);
-				new_container = _allocator.allocate(_size + n);
-				while (first != position)
+				if (n == 0)
+					return ;
+				else if (max_size() - _size < n)
+					throw std::length_error("vector");
+				difference_type start = position - begin();
+				if (_size + n > _capacity)
 				{
-					new_container[i] = *first;
-					first++;
-					i++;
+					size_type new_cap = _capacity * 2 >= _size + n ? _capacity * 2 : _size + n;
+					pointer new_arr = _allocator.allocate(new_cap);
+					std::uninitialized_copy(begin(), position, iterator(new_arr));
+					for (size_type i = 0; i < n; i++)
+						_allocator.construct(new_arr + start + i, val);
+					std::uninitialized_copy(position, end(), iterator(new_arr + start + n));
+					for (size_type i = 0; i < _size; i++)
+						_allocator.destroy(_container + i);
+					_allocator.deallocate(_container, _capacity);
+					_size += n;
+					_capacity = new_cap;
+					_container = new_arr;
 				}
-				while (n)
+				else
 				{
-					new_container[i] = val;
-					i++;
-					n--;
+					for (size_type i = _size; i > static_cast<size_type>(start); i--) {
+						_allocator.destroy(_container + i + n - 1);
+						_allocator.construct(_container + i + n - 1, *(_container + i - 1));
+					}
+					for (size_type i = 0; i < n; i++){
+						_allocator.destroy(_container + i + start);
+						_allocator.construct(_container + i + start, val);
+					}
+					_size += n;
 				}
-				while (position != last)
-				{
-					new_container[i] = *position;
-					i++;
-					++position;
-				}
-				clearContainer();
-				_container = new_container;
-				_size = i;
 			}
 			template <class InputIterator>
 			void		insert(iterator position, InputIterator first, InputIterator last,
 					typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type* = 0)
 			{
-				pointer		new_container = NULL;
-				iterator	f = begin();
-				iterator	l = end();
-				iterator	res;
-				size_t		i = 0;
-
-				while (_size + (last - first) > _capacity)
-					_capacity = _capacity * 2;
-				new_container = _allocator.allocate(_size + (last - first));
-				while (f != position)
+				if (position < begin() || position > end() || first > last)
+					throw std::logic_error("vector");
+				size_type start = static_cast<size_type>(position - begin());
+				size_type count = static_cast<size_type>(last - first);
+				if (_size + count > _capacity)
 				{
-					new_container[i++] = *f;
-					f++;
+					size_type new_cap = _capacity * 2 >= _size + count ? _capacity * 2 : _size + count;
+					pointer new_arr = _allocator.allocate(new_cap);
+					std::uninitialized_copy(begin(), position, iterator(new_arr));
+					try
+					{
+						for (size_type i = 0; i < static_cast<size_type>(count); i++, first++)
+							_allocator.construct(new_arr + start + i, *first);
+					}
+					catch (...)
+					{
+						for (size_type i = 0; i < count + start; ++i)
+							_allocator.destroy(new_arr + i);
+						_allocator.deallocate(new_arr, new_cap);
+						throw;
+					}
+					std::uninitialized_copy(position, end(), iterator(new_arr + start + count));
+					for (size_type i = 0; i < _size; i++)
+						_allocator.destroy(_container + i);
+					_allocator.deallocate(_container, _capacity);
+					_size += count;
+					_capacity = new_cap;
+					_container = new_arr;
 				}
-				while (first != last)
+				else
 				{
-					new_container[i++] = *first;
-					first++;
+					for (size_type i = _size; i > static_cast<size_type>(start); i--) {
+						_allocator.destroy(_container + i + count - 1);
+						_allocator.construct(_container + i + count - 1, *(_container + i - 1));
+					}
+					for (size_type i = 0; i < static_cast<size_type>(count); i++, first++) {
+						_allocator.destroy(_container + i + count);
+						_allocator.construct(_container + start + i, *first);
+					}
+					_size += count;
 				}
-				while (position != l)
-				{
-					new_container[i++] = *position;
-					++position;
-				}
-				clearContainer();
-				_container = new_container;
-				_size = i;
 			}
 			iterator	erase(iterator position)
 			{
-				iterator tmp(position);
-				++tmp;
-				return (this->erase(position, tmp));
+				size_type d = static_cast<size_type>(std::distance(begin(), position));
+				for (size_type i = d; i < _size - 1; ++i)
+				{
+					_allocator.destroy(_container + i);
+					_allocator.construct(_container + i, *(_container + i + 1));
+				}
+				_size--;
+				_allocator.destroy(_container + _size - 1);
+				return iterator(_container + d);
 			}
 			iterator	erase(iterator first, iterator last)
 			{
-				iterator it = this->begin();
-				size_type i = 0;
-				while (it != first) {
-					++it;
-					++i;
+				difference_type start = std::distance(begin(), first);
+				difference_type need_to_copy = std::distance(last, end());
+				bool last_is_end = (last == end());
+				while (first != last)
+				{
+					_allocator.destroy(&(*first));
+					first++;
 				}
-				if (it == this->end())
-					return (this->end());
-				size_type returnPosition = i;
-				size_type deletedElements = 0;
-				size_type stopPos = i;
-				while (first != last) {
-					(*first++).value_type::~value_type();
-					++deletedElements;
-					++stopPos;
+				size_type i = start;
+				while (last < end())
+				{
+					if (this->_container + start)
+						_allocator.destroy(_container + i);
+					_allocator.construct(_container + i, *last);
+					i++;
+					last++;
 				}
-				// std::memmove ?
-				for ( ; stopPos < this->_size; ++stopPos)
-					this->copy_construct(i++, this->_container[stopPos]);
-				this->_size -= deletedElements;
-				return (iterator(&this->_container[returnPosition]));
+				for (size_type i = start + need_to_copy; i < _size; i++)
+					_allocator.destroy(_container + i);
+				_size = start + need_to_copy;
+				return last_is_end ? end() : iterator(_container + start);
 			}
 			void		swap(vector& x)
 			{
-				ft::vector<value_type>	temp(x);
-				x = *this;
-				*this = temp;
+				std::swap(_container, x._container);
+				std::swap(_size, x._size);
+				std::swap(_capacity, x._capacity);
 			}
 			void		clear()
 			{
-				while (_size)
-					_allocator.destroy(_container + _size--);
+				for (size_type i = 0; i < _size; i++)
+					_allocator.destroy(_container + i);
+				_size = 0;
 			}
 
 			// Allocator

@@ -52,9 +52,8 @@ namespace ft
 			template< class InputIterator >
 			map(InputIterator first, InputIterator last, const key_compare& compare = key_compare(), const allocator_type& alloc = allocator_type())
 				: _alloc(alloc), _tree(first, last, compare, _alloc), _compare(compare) {}
-			map(const map& x)
+			map(const map& x) : _alloc(x._alloc), _tree(), _compare(x._compare)
 			{
-				clear();
 				insert(x.begin(), x.end());
 			}
 
@@ -62,8 +61,13 @@ namespace ft
 		public:
 			map&	operator=(const map& x)
 			{
-				clear();
-				insert(x.begin(), x.end());
+				if (&x != this)
+				{
+					_alloc = x._alloc;
+					_compare = x._compare;
+					clear();
+					insert(x.begin(), x.end());
+				}
 				return (*this);
 			}
 

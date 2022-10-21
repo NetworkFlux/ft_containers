@@ -10,12 +10,11 @@ namespace ft
 	{
 		// Type definitions
 		public:
-			typedef random_access_iterator_tag	iterator_category;
-			typedef T 							value_type;
-			typedef T*							pointer;
-			typedef T&							reference;
-			typedef size_t						size_type;
-			typedef std::ptrdiff_t				difference_type;
+			typedef	typename	iterator_traits<T*>::value_type 		value_type;
+			typedef	typename	iterator_traits<T*>::pointer			pointer;
+			typedef	typename	iterator_traits<T*>::reference			reference;
+			typedef	typename	iterator_traits<T*>::difference_type	difference_type;
+			typedef				std::random_access_iterator_tag			iterator_category;
 
 		// Member variable
 		protected:
