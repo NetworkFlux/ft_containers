@@ -1,6 +1,7 @@
 #pragma once
 
 #include "RAIterators.hpp"
+#include "../map/treeIterator.hpp"
 #include <memory>
 #include <iterator>
 
@@ -45,13 +46,13 @@ namespace ft
 						_allocator.construct(_container + i, val);
 				}
 			}
-			vector (const vector& x) : _size(0), _capacity(0)
+			vector (const vector& x) : _container(NULL), _size(0), _capacity(0), _allocator(allocator_type())
 			{
-				*this = x;
+				insert(begin(), x.begin(), x.end());
 			}
 			template <class InputIterator>
 			vector (InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type(),
-						typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type* = 0) : _allocator(alloc)
+				typename ft::enable_if<!ft::is_integral<InputIterator>::value>::type* = 0) : _allocator(alloc)
 			{
 				_size = last - first;
 				_capacity = _size;
@@ -367,6 +368,7 @@ namespace ft
 				std::swap(_container, x._container);
 				std::swap(_size, x._size);
 				std::swap(_capacity, x._capacity);
+				std::swap(_allocator, x._allocator);
 			}
 			void		clear()
 			{

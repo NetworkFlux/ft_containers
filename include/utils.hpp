@@ -16,19 +16,19 @@ namespace ft
 	template < class Iter>
 	struct iterator_traits
 	{
-		typedef typename Iter::iterator_category	iterator_category;
-		typedef typename Iter::value_type			value_type;
-		typedef typename Iter::pointer				pointer;
-		typedef typename Iter::reference			reference;
-		typedef typename Iter::difference_type		difference_type;
+		typedef typename	Iter::iterator_category		iterator_category;
+		typedef typename	Iter::value_type			value_type;
+		typedef typename	Iter::pointer				pointer;
+		typedef typename	Iter::reference				reference;
+		typedef typename	Iter::difference_type		difference_type;
 	};
 	template < class T >
 	struct iterator_traits<T*>
 	{
-		typedef random_access_iterator_tag	iterator_category;
-		typedef T							value_type;
-		typedef T*							pointer;
-		typedef T&							reference;
+		typedef	random_access_iterator_tag	iterator_category;
+		typedef	T							value_type;
+		typedef	T*							pointer;
+		typedef	T&							reference;
 		typedef typename std::ptrdiff_t		difference_type;
 	};
 	template < class T >
@@ -83,7 +83,7 @@ namespace ft
 	// -- LEXICOGRAPHICAL COMPARE --
 	template <class InputIterator1, class InputIterator2>
 	bool lexicographical_compare (InputIterator1 first1, InputIterator1 last1,
-								InputIterator2 first2, InputIterator2 last2)
+		InputIterator2 first2, InputIterator2 last2)
 	{
 		while (first1!=last1)
 		{
@@ -97,7 +97,7 @@ namespace ft
 	}
 	template <class InputIterator1, class InputIterator2, class Compare>
 	bool lexicographical_compare (InputIterator1 first1, InputIterator1 last1,
-								InputIterator2 first2, InputIterator2 last2, Compare comp)
+		InputIterator2 first2, InputIterator2 last2, Compare comp)
 	{
 		while (first1!=last1)
 		{
@@ -108,5 +108,18 @@ namespace ft
 			++first1; ++first2;
 		}
 		return (first2!=last2);
+	}
+
+	template <class InputIterator1, class InputIterator2>
+	bool	equal(InputIterator1 first1, InputIterator1 last1, InputIterator2 first2)
+	{
+		while (first1!=last1)
+		{
+			if (!(*first1 == *first2))
+				return (false);
+			++first1;
+			++first2;
+		}
+		return (true);
 	}
 }

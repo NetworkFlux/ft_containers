@@ -33,45 +33,19 @@ namespace ft
 
 	// Relationnal Operators for Pair
 	template <class T1, class T2>
-	bool	operator==(const pair<T1, T2>& lhs, const pair<T1, T2>& rhs)
-	{
-		return ((lhs.first == rhs.first) && (lhs.second == rhs.second));
-	}
-
+	bool	operator==(const pair<T1, T2>& lhs, const pair<T1, T2>& rhs) { return ((lhs.first == rhs.first) && (lhs.second == rhs.second)); }
 	template <class T1, class T2>
-	bool	operator!=(const pair<T1, T2>& lhs, const pair<T1, T2>& rhs)
-	{
-		return (!(lhs == rhs));
-	}
-
+	bool	operator!=(const pair<T1, T2>& lhs, const pair<T1, T2>& rhs) { return (!(lhs == rhs)); }
 	template <class T1, class T2>
-	bool	operator<(const pair<T1, T2>& lhs, const pair<T1, T2>& rhs)
-	{
-		return (lhs.first < rhs.first || (!(rhs.first < lhs.first) && lhs.second < rhs.second));
-	}
-
+	bool	operator<(const pair<T1, T2>& lhs, const pair<T1, T2>& rhs) { return (lhs.first < rhs.first || (!(rhs.first < lhs.first) && lhs.second < rhs.second)); }
 	template <class T1, class T2>
-	bool	operator<=(const pair<T1, T2>& lhs, const pair<T1, T2>& rhs)
-	{
-		return (!(rhs < lhs));
-	}
-
+	bool	operator<=(const pair<T1, T2>& lhs, const pair<T1, T2>& rhs) { return (!(rhs < lhs)); }
 	template <class T1, class T2>
-	bool	operator>(const pair<T1, T2>& lhs, const pair<T1, T2>& rhs)
-	{
-		return (rhs < lhs);
-	}
-
+	bool	operator>(const pair<T1, T2>& lhs, const pair<T1, T2>& rhs) { return (rhs < lhs); }
 	template <class T1, class T2>
-	bool	operator>=(const pair<T1, T2>& lhs, const pair<T1, T2>& rhs)
-	{
-		return (!(lhs < rhs));
-	}
+	bool	operator>=(const pair<T1, T2>& lhs, const pair<T1, T2>& rhs) { return (!(lhs < rhs)); }
 
 	// -- MAKE_PAIR --
 	template <class T1, class T2>
-	ft::pair<T1, T2>	make_pair(T1 x, T2 y)
-	{
-		return (ft::pair<T1, T2>(x, y));
-	}
+	ft::pair<T1, T2>	make_pair(T1 x, T2 y) { return (ft::pair<T1, T2>(x, y)); }
 }
