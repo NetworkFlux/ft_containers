@@ -52,7 +52,7 @@ namespace ft
 			RBTree(const RBTree& src) : _compare(src._compare), _root(NULL) { *this = src; }
 			template<class InputIterator>
 			RBTree(typename ft::enable_if< !ft::is_integral<InputIterator>::value, InputIterator >::type first, InputIterator last,
-				const value_compare& comp, const allocator_type& alloc = allocator_type()) : _val_alloc(alloc), _node_alloc(node_allocator()), _compare(comp)
+				const value_compare& comp, const allocator_type& alloc = allocator_type()) : _val_alloc(alloc), _node_alloc(node_allocator()), _compare(comp), _root(0), _size(0)
 			{
 				init_nil_head();
 				_root = _header;

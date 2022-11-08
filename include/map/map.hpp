@@ -55,7 +55,7 @@ namespace ft
 			template<class InputIterator>
 			map(InputIterator first, InputIterator last, const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()) :
 				_alloc(alloc), _tree(first, last, _compare, _alloc), _compare(comp) {}
-			// map(const map& x) : _alloc(x._alloc), _tree(), _compare(x._compare) { insert(x.begin(), x.end()); }
+			map(const map& x) : _alloc(x._alloc), _tree(x._compare, x._alloc), _compare(x._compare) { insert(x.begin(), x.end()); }
 
 		// Operator Overload
 		public:

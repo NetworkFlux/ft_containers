@@ -650,42 +650,6 @@ void	mapOperations(void)
 	std::cout << "equal_range of 3 : " << map.equal_range(3).first->second << " | " << map.equal_range(3).second->second << std::endl;
 }
 
-void test(void)
-{
-    std::vector<int> v;
-	std::vector<int> vector;
-	vector.push_back(8);
-	vector.push_back(7);
-	vector.push_back(3);
-	vector.push_back(2);
-    vector.assign(1100 * 1, 11);
-    std::vector<int> tmp(500 * 1, 5), tmp2(1000 * 1, 10), tmp3(1500 * 1, 15), tmp4(3000 * 1, 30);
-    v.push_back(vector[2]);
-    v.push_back(vector.size());
-    v.push_back(vector.capacity());
-    long *adr1 = reinterpret_cast<long *>(&vector);
-    long *adr2 = reinterpret_cast<long *>(&tmp);
-    vector.swap(tmp);
-    if (reinterpret_cast<long *>(&vector) == adr1 && reinterpret_cast<long *>(&tmp) == adr2)
-    	v.push_back(1);
-    v.push_back(vector[2]);
-    v.push_back(vector.size());
-    v.push_back(vector.capacity());
-    vector.swap(tmp3);
-    v.push_back(vector[2]);
-    v.push_back(vector.size());
-    v.push_back(vector.capacity());
-    std::swap(vector, tmp2);
-    v.push_back(vector[2]);
-    v.push_back(vector.size());
-    v.push_back(vector.capacity());
-    std::swap(vector, tmp4);
-    v.push_back(vector[2]);
-    v.push_back(vector.size());
-    v.push_back(vector.capacity());
-    printVector(v);
-}
-
 int		main(void)
 {
 	// -- MAIN INIT --
@@ -695,32 +659,25 @@ int		main(void)
 	// -- TESTS --
 	{
 		// Vector
-		// vectorConstructor();
-		// vectorIterator();
-		// vectorCapacity();
-		// vectorElementAccess();
-		// vectorModifiers();
-		// vectorRelationalOperators();
+		vectorConstructor();
+		vectorIterator();
+		vectorCapacity();
+		vectorElementAccess();
+		vectorModifiers();
+		vectorRelationalOperators();
 
 		// Stack
-		// stackTests();
-		// stackRealtionalOperators();
+		stackTests();
+		stackRealtionalOperators();
 
 		// Map
-		// pairTests();
-		// makePairTests();
-		// nodeTests();
-		// treeTests();
-
-		// mapConstructor();
-		// mapIterators();
-		// mapCapacity();
-		// mapElementAccess();
-		// mapModifiers();
-		// mapObservers();
-		// mapOperations();
-
-		test();
+		mapConstructor();
+		mapIterators();
+		mapCapacity();
+		mapElementAccess();
+		mapModifiers();
+		mapObservers();
+		mapOperations();
 	}
 
 	// -- MAIN END --

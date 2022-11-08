@@ -1,8 +1,6 @@
 #include <sys/time.h>
 #include "../include/stack/stack.hpp"
 #include "../include/map/map.hpp"
-#include <map>
-#include <vector>
 
 #define NAMESPACE ft
 #define VECTOR(T) NAMESPACE::vector<T>
