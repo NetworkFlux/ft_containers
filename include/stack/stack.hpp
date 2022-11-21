@@ -15,7 +15,7 @@ namespace ft
 			typedef	size_t		size_type;
 
 		// Member variable
-		private:
+		protected:
 			container_type	_container;
 
 		// Constructors

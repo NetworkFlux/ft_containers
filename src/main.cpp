@@ -1,6 +1,7 @@
 #include <sys/time.h>
 #include "../include/stack/stack.hpp"
 #include "../include/map/map.hpp"
+#include <vector>
 
 #define NAMESPACE ft
 #define VECTOR(T) NAMESPACE::vector<T>
@@ -185,6 +186,45 @@ void	vectorIterator(void)
 	*rb = *rb * *rb;
 	std::cout << *rb << "]" << std::endl;
 	std::cout << std::endl;
+
+	printSubTitle("Iterator and const Iterator comparaison");
+	VECTOR(int)	vect;
+	for (int i = 0; i < 10; i++)
+		vect.push_back(i);
+
+	printVector(vect);
+	ft::vector<int>::iterator	it = vect.begin();
+	ft::vector<int>::const_iterator	itc = vect.begin();
+	it++;
+	it++;
+	itc++;
+	itc++;
+	std::cout << "it = " << *it << " | itc = " << *itc << std::endl;
+	std::cout << "If the iterators and const iterator are comparable we should see a 1 : " << (it == itc) << std::endl;
+
+	printSubTitle("Iterator correctness with swap()");
+	VECTOR(int)	vect2;
+	for (int i = 10; i < 20; i++)
+		vect2.push_back(i);
+	printVector(vect);
+	printVector(vect2);
+	it = vect.begin();
+	ft::vector<int>::iterator	end = vect.end();
+	ft::vector<int>::iterator	it2 = vect2.begin();
+	ft::vector<int>::iterator	end2 = vect2.end();
+	vect.swap(vect2);
+	std::cout << "Outputing the vector contents using their iterators" << std::endl;
+	std::cout << "Vector 1 ";
+	for (;it != end; it++)
+		std::cout << " " << *it;
+	std::cout << std::endl;
+	std::cout << "Vector 2 ";
+	for (;it2 != end2; it2++)
+		std::cout << " " << *it2;
+	std::cout << std::endl;
+	printVector(vect);
+	printVector(vect2);
+
 }
 void	vectorCapacity(void)
 {
@@ -340,6 +380,7 @@ void	stackTests(void)
 {
 	STACK(int)	stack1;
 	STACK(int)	stack2(stack1);
+	ft::stack<int, std::vector<int> >	stackVector;
 
 	printTitle("Stack Tests");
 	printStack(stack1);
@@ -461,6 +502,28 @@ void	mapIterators(void)
 	for (MAP(int, std::string)::reverse_iterator rit = map.rbegin(); rit != map.rend(); rit++)
 		rit->second = "Modified reverse";
 	printMap(map);
+
+	printSubTitle("Iterator correctness");
+	map[4] = "4444";
+	map[5] = "5555";
+	map[6] = "6666";
+	map[7] = "7777";
+	map[8] = "8888";
+	map[9] = "9999";
+	MAP(int, std::string)::iterator	it = map.begin();
+	it++;
+	it++;
+	printMap(map);
+	std::cout << "it points to : " << it->second << std::endl;
+	map.erase(map.begin());
+	map.erase(--(map.end()));
+	map.erase(map.begin());
+	printMap(map);
+	std::cout << "After some deletions, it points to : " << it->second << std::endl;
+	map.insert(map.begin(), ft::make_pair(0, "0000"));
+	map.insert(--(map.end()), ft::make_pair(10, "1010"));
+	printMap(map);
+	std::cout << "After some insertions, it points to : " << it->second << std::endl;
 }
 void	mapCapacity(void)
 {

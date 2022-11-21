@@ -411,10 +411,6 @@ namespace ft
 					_allocator.deallocate(_container, _capacity);
 				}
 			}
-			void	copy_construct(size_type idx, const_reference val)
-			{
-				new(&this->_container[idx]) value_type(val);
-			}
 	};
 
 	// Relational operators for vector

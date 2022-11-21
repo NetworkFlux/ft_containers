@@ -25,7 +25,7 @@ namespace ft
 		public:
 			random_access_iterator() : _ptr(NULL) {}
 			random_access_iterator(pointer p) : _ptr(p) {}
-			random_access_iterator(const random_access_iterator &other) : _ptr(other._ptr) {}
+			random_access_iterator(const random_access_iterator<typename remove_const<value_type>::type > & src) : _ptr(&(*src)) {}
 			virtual ~random_access_iterator() {}
 
 
