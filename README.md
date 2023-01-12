@@ -1,6 +1,6 @@
 # -- ft_containers --
 
-## Usage (linux only) -- 👈
+## Usage (Linux only) -- 👈
 
 This project provides a huge tester that compares the output of my containers to the real ones.
 ```bash
@@ -20,12 +20,12 @@ bash test.sh
 6. Stack
 
 ## Challenge -- 💡
-This project is about reimplemanting 3 of the C++ Standard Library, Vector, Map and Stack. Each structures has its own complex optemized data structure. Those containers are expected to have the exact same behaviour as the real ones.
+This project is about reimplementing 3 of the C++ Standard Library, Vector, Map and Stack. Each structure has its own complex optimized data structure. Those containers are expected to have the exact same behavior as the real ones.
 
 ## Objectives -- ✅
 - Master C++ language
-- Optemize as much (should be as fast as the real ones)
-- Learn about complexe data structures and Complexity
+- Optimize as much (should be as fast as the real ones)
+- Learn about complex data structures and Complexity
 
 ## Comments -- ⚙️
-This project was pretty hard to do as the standard containers are loaded with functionnalities.
+This project was pretty hard to do as the standard containers are loaded with functionalities.
