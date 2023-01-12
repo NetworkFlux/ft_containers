@@ -34,6 +34,7 @@ clean		:
 
 fclean		: clean
 			@$(RM) $(NAME)
+			@$(RM) std_output.txt ft_output.txt a.out
 
 re			: fclean all
 

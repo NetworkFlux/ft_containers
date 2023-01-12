@@ -213,7 +213,7 @@ void	vectorIterator(void)
 	ft::vector<int>::iterator	it2 = vect2.begin();
 	ft::vector<int>::iterator	end2 = vect2.end();
 	vect.swap(vect2);
-	std::cout << "Outputing the vector contents using their iterators" << std::endl;
+	printInfo("Outputing the vector contents using their iterators");
 	std::cout << "Vector 1 ";
 	for (;it != end; it++)
 		std::cout << " " << *it;
@@ -224,7 +224,6 @@ void	vectorIterator(void)
 	std::cout << std::endl;
 	printVector(vect);
 	printVector(vect2);
-
 }
 void	vectorCapacity(void)
 {
@@ -485,6 +484,7 @@ void	mapIterators(void)
 	map[7] = "7777";
 	map[8] = "8888";
 	map[9] = "9999";
+	printInfo("Map is initialize with those values");
 	printMap(map);
 	printSubTitle("begin() - end()");
 	printInfo("Printing map using iterators :");
@@ -510,6 +510,7 @@ void	mapIterators(void)
 	map[7] = "7777";
 	map[8] = "8888";
 	map[9] = "9999";
+	printInfo("Map is initialize with those values");
 	MAP(int, std::string)::iterator	it = map.begin();
 	it++;
 	it++;

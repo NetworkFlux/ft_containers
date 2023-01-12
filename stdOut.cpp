@@ -7,9 +7,6 @@
 #define NAMESPACE std
 #define VECTOR(T) NAMESPACE::vector<T>
 #define STACK(T) NAMESPACE::stack<T>
-#define PAIR(U, V) NAMESPACE::pair<U, V>
-#define NODE(T) NAMESPACE::Node<T>
-#define TREE(T) NAMESPACE::Tree<T>
 #define MAP(T, P) NAMESPACE::map<T, P>
 
 // -- OUTPUT MANAGING --
@@ -62,6 +59,21 @@ void	printStack(STACK(T)& stack)
 		int x = stack2.top();
 		stack2.pop();
 		printStack(stack2);
+		std::cout << x << " ";
+		stack2.push(x);
+	}
+}
+
+void	printStack2(std::stack<int, std::vector<int> >& stack)
+{
+	std::stack<int, std::vector<int> >	stack2(stack);
+	if (stack2.size() == 0)
+		return ;
+	else
+	{
+		int x = stack2.top();
+		stack2.pop();
+		printStack2(stack2);
 		std::cout << x << " ";
 		stack2.push(x);
 	}
@@ -216,7 +228,7 @@ void	vectorIterator(void)
 	std::vector<int>::iterator	it2 = vect2.begin();
 	std::vector<int>::iterator	end2 = vect2.end();
 	vect.swap(vect2);
-	std::cout << "Outputing the vector contents using their iterators" << std::endl;
+	printInfo("Outputing the vector contents using their iterators");
 	std::cout << "Vector 1 ";
 	for (;it != end; it++)
 		std::cout << " " << *it;
@@ -227,7 +239,6 @@ void	vectorIterator(void)
 	std::cout << std::endl;
 	printVector(vect);
 	printVector(vect2);
-
 }
 void	vectorCapacity(void)
 {
@@ -404,16 +415,15 @@ void	stackTests(void)
 }
 void	stackRealtionalOperators(void)
 {
-	STACK(int)	stack1;
-	STACK(int)	stack2;
+	VECTOR(int)	vec1(2, 10);
+	VECTOR(int)	vec2(1, 14);
+	std::stack<int, std::vector<int> > stack1(vec1);
+	std::stack<int, std::vector<int> > stack2(vec2);
 
-	stack1.push(10);
-	stack1.push(10);
-	stack2.push(14);
 	printTitle("Relational Operators");
-	printStack(stack1);
+	printStack2(stack1);
 	std::cout << std::endl;
-	printStack(stack2);
+	printStack2(stack2);
 	std::cout << std::endl;
 	printSubTitle(" == " );
 	std::cout << "Are stack 1 and stack 2 equal : " << (stack1 == stack2) << std::endl;
@@ -489,6 +499,7 @@ void	mapIterators(void)
 	map[7] = "7777";
 	map[8] = "8888";
 	map[9] = "9999";
+	printInfo("Map is initialize with those values");
 	printMap(map);
 	printSubTitle("begin() - end()");
 	printInfo("Printing map using iterators :");
@@ -514,6 +525,7 @@ void	mapIterators(void)
 	map[7] = "7777";
 	map[8] = "8888";
 	map[9] = "9999";
+	printInfo("Map is initialize with those values");
 	MAP(int, std::string)::iterator	it = map.begin();
 	it++;
 	it++;
